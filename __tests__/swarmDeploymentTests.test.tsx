@@ -24,4 +24,11 @@ describe('Swarm Deployment component', () => {
       expect(wrapper.find('input')).toHaveLength(1);
     });
   });
+
+  describe('handling of state', () => {
+    // check that state is being updated correctly and contains the right information 
+    // make sure currentFile can be accessed in component 
+    // test for success/error 
+
+  });
 });

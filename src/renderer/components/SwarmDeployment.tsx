@@ -68,7 +68,7 @@ const DeploySwarm: React.FC<Props> = ({
 
   // keep a variable for access to hidden div in order to toggle hidden/visible
   // may be better way to do this? // -> change to React best practice method of doing this
-  const swarmDeployPopup: any = document.getElementById('swarm-deploy-popup');
+  const swarmDeployPopup: HTMLElement | null = document.getElementById('swarm-deploy-popup');
   
   // save html code in variables for easier access later
   // the default for the pop-up div, before any interaction with swarm / after leaving swarm
@@ -81,7 +81,7 @@ const DeploySwarm: React.FC<Props> = ({
         onClick={() => { 
           if (currentFile) {
             console.log('stackName inside onClick: ', stackNameRef.current);
-            getNameAndDeploy(event)
+            getNameAndDeploy()
           } else {
             setSuccess(false);
             setNoFile(true);
@@ -117,21 +117,23 @@ const DeploySwarm: React.FC<Props> = ({
 
   // change visibility of HTML element from hidden to visible or vice versa
   // used for the popup box
-  const toggleVisible = (element: any) => {
+  const toggleVisible = (element: HTMLElement) => {
     if (element) element.style.visibility = 'visible';
   }
-  const toggleHidden = (element: any) => {
+  const toggleHidden = (element: HTMLElement) => {
     if (element) element.style.visibility = 'hidden';
   }
 
   // retrieve input from user and pass it to runDockerSwarmDeployment as an argument
   // the function will return stdout from running each function, so that we have access to that information
-  const getNameAndDeploy = async (event: any) => {
+  const getNameAndDeploy = async (): Promise<any> => {
     // // get value from user's input
     // console.log('current stack name from state: ', stackNameRef.current);
 
     // hide pop-up while running commands
-    toggleHidden(swarmDeployPopup);
+    if (swarmDeployPopup) {
+      toggleHidden(swarmDeployPopup);
+    }
     setSwarmDeployState(2);
 
     // await results from running dwarm deployment shell tasks 
@@ -150,19 +152,25 @@ const DeploySwarm: React.FC<Props> = ({
       setSuccess(true);
       setSwarmExists(true);
       setSwarmDeployState(3);
-      toggleVisible(swarmDeployPopup);
+      if (swarmDeployPopup) {
+        toggleVisible(swarmDeployPopup);
+      }
     } else {
       setSwarmExists(true);
       setSuccess(false);
       setSwarmDeployState(1);
-      toggleVisible(swarmDeployPopup);
+      if (swarmDeployPopup) {
+        toggleVisible(swarmDeployPopup);
+      }
     }
   };
 
   // function to allow the user to leave the swarm
   // called in onClicks
-  const leaveSwarm = () => {
-    toggleHidden(swarmDeployPopup);
+  const leaveSwarm = (): void => {
+    if (swarmDeployPopup) {
+      toggleHidden(swarmDeployPopup);
+    }
     setSwarmExists(false);
     setSuccess(false);
     setNoFile(false);
@@ -172,8 +180,8 @@ const DeploySwarm: React.FC<Props> = ({
   }
 
   // uninitialised variable allowing the values to change depending on state
-  // used for swarm deploy button in leftNav
-  let swarmBtnTitle: any, swarmOnClick: any;
+  // used for swarm deploy button in leftNav 
+  let swarmBtnTitle: string | undefined, swarmOnClick: any;
 
   if (!swarmExists || swarmExists && !success) {
     swarmBtnTitle = 'Deploy to Swarm';
@@ -185,7 +193,9 @@ const DeploySwarm: React.FC<Props> = ({
   } else if (swarmExists && success) {
     swarmBtnTitle = 'Leave Swarm';
     swarmOnClick = () => {
-      toggleHidden(swarmDeployPopup);
+      if (swarmDeployPopup) {
+        toggleHidden(swarmDeployPopup);
+      }
       leaveSwarm();
     }
   } 

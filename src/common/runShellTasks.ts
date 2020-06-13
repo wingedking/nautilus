@@ -23,6 +23,9 @@ const runDockerSwarmDeployStack = (filePath: string, stackName: string) =>
 const runLeaveSwarm = () => 
   runShell(`docker swarm leave -f`, false);
 
+const runCheckStack = () => 
+  runShell(`docker stack ls`, false);
+
 const runDockerSwarmDeployment = async (filePath: string, stackName: string) => {
   let stackDeployResult, initResult;
   await runDockerSwarmInit(filePath).then((data) => initResult = data)
@@ -84,4 +87,5 @@ export { runDockerComposeDeployment,
         runDockerSwarmDeployment, 
         runDockerSwarmInit, 
         runLeaveSwarm,
+        runCheckStack,
         runDockerSwarmDeployStack };

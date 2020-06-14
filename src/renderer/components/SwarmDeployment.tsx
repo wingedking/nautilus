@@ -196,7 +196,7 @@ const DeploySwarm: React.FC<Props> = ({
 
   // uninitialised variable allowing the values to change depending on state
   // used for swarm deploy button in leftNav
-  let swarmBtnTitle: any, swarmOnClick: any;
+  let swarmBtnTitle: string | undefined, swarmOnClick: any;
 
   if (!swarmExists || swarmExists && !success) {
     swarmBtnTitle = 'Deploy to Swarm';

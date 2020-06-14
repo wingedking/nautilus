@@ -94,7 +94,10 @@ const DeploySwarm: React.FC<Props> = ({
         onClick={() => { 
           if (currentFile) {
             console.log('stackName inside onClick: ', stackNameRef.current);
-            getNameAndDeploy()
+            if (swarmExists) addStackToSwarm();
+            else {
+              getNameAndDeploy();
+            }
           } else {
             setSuccess(false);
             setNoFile(true);
@@ -120,6 +123,7 @@ const DeploySwarm: React.FC<Props> = ({
         <button 
           id="add-stack-btn"
           onClick={() => addStackToSwarm()}>
+            Add new stack
         </button>
       </div>
     </div>);
@@ -149,10 +153,7 @@ const DeploySwarm: React.FC<Props> = ({
 
   // retrieve input from user and pass it to runDockerSwarmDeployment as an argument
   // the function will return stdout from running each function, so that we have access to that information
-  const getNameAndDeploy = async () => {
-    // // get value from user's input
-    // console.log('current stack name from state: ', stackNameRef.current);
-    
+  const getNameAndDeploy = async () => {    
     // hide pop-up while running commands
     toggleHidden(swarmDeployPopup);
     setSwarmDeployState(2);

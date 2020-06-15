@@ -13,12 +13,11 @@ import React from 'react';
 // IMPORT REACT COMPONENTS
 import ServiceInfo from './ServiceInfo';
 import FileSelector from './FileSelector';
-import DeploySwarm from './SwarmDeployment';
-// import SwarmButtonCluster from '../../common/dockerSwarmDeployment';
+import SwarmDeployment from './SwarmDeployment';
+import ComposeDeployment from './ComposeDeployment';
 import Title from './Title';
 import { FileOpen, Service } from '../App.d';
 
-import ComposeDeployment from './ComposeDeployment';
 
 type Props = {
   service: Service;
@@ -43,7 +42,7 @@ const LeftNav: React.FC<Props> = ({
       </div>
       <ServiceInfo selectedContainer={selectedContainer} service={service} />
       <ComposeDeployment currentFilePath={currentFile} fileOpen={fileOpen}/>
-      <DeploySwarm currentFile={currentFile} />
+      <SwarmDeployment currentFile={currentFile} />
     </div>
   );
 };

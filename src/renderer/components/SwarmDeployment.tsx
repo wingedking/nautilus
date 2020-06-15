@@ -18,7 +18,7 @@ type Props = {
   currentFile: string,
 };
 
-const DeploySwarm: React.FC<Props> = ({
+const SwarmDeployment: React.FC<Props> = ({
   currentFile
 }) => {
   // Create React hooks to hold onto state
@@ -238,4 +238,4 @@ const DeploySwarm: React.FC<Props> = ({
   )
 };
 
-export default DeploySwarm;
+export default SwarmDeployment;

@@ -18,13 +18,13 @@ type Props = {
   currentFile: string,
 };
 
-const DeploySwarm: React.FC<Props> = ({
+const SwarmDeployment: React.FC<Props> = ({
   currentFile
 }) => {
   // Create React hooks to hold onto state
   const [success, setSuccess] = useState(false);
   const [swarmExists, setSwarmExists] = useState(false);
-  const [noFile, setNoFile] = useState(false);
+  // const [noFile, setNoFile] = useState(false);
   const [stdOutMessage, setStdOutMessage] = useState('');
   const [nodeAddress, setNodeAddress] = useState('');
   const [infoFromSwarm, setInfoFromSwarm] = useState({});
@@ -39,18 +39,16 @@ const DeploySwarm: React.FC<Props> = ({
   // if there's no swarm and there is a file (defaults to true), show popup with input 
   console.log('line 39 stackName', stackNameRef.current);
 
-  useEffect(() => {
-    console.log('use effect line 40', stackName);
-    if (!swarmExists && currentFile) {
-      setNoFile(false);
-    }
-    else setNoFile(true);
-  }, [currentFile]);
+  // useEffect(() => {
+  //   if (!swarmExists && currentFile) {
+  //     setNoFile(false);
+  //   }
+  //   else setNoFile(true);
+  // }, [currentFile]);
 
   // if swarm exists and deployment was successful, render success div
   // else if swarm exists but deployment was unsuccessful, render error message
   useEffect(() => {
-    console.log('line 49', stackName);
     if (swarmExists && success) {
       setPopupContent(successDiv);
     } else if (swarmExists && !success) {
@@ -64,20 +62,18 @@ const DeploySwarm: React.FC<Props> = ({
   // TO DO - have different message from default error message
   // currently using default, but would be best to have a 'please open a file' message
   useEffect(() => {
-    if (currentFile) {
+    if (currentFile && !swarmExists) {
       setSwarmDeployState(1);
       setPopupContent(popupStartDiv);
-    }
-    else if (!currentFile) {
+    } else if (currentFile && swarmExists) {
+      setSwarmDeployState(3);
+      setPopupContent(successDiv);
+    } else if (!currentFile) {
       setSwarmDeployState(0);
       setPopupContent(errorDiv);
-    } 
-  }, [noFile, currentFile]);
+    }
+  }, [currentFile, swarmExists]);
 
-  /*useEffect(() => {
-    console.log('useEffect', currentFile);
-    setNoFile(false);
-  }, [currentFile])*/
   // keep a variable for access to hidden div in order to toggle hidden/visible
   // may be better way to do this? // -> change to React best practice method of doing this
   const swarmDeployPopup: any = document.getElementById('swarm-deploy-popup');
@@ -95,12 +91,10 @@ const DeploySwarm: React.FC<Props> = ({
           if (currentFile) {
             console.log('stackName inside onClick: ', stackNameRef.current);
             if (swarmExists) addStackToSwarm();
-            else {
-              getNameAndDeploy();
-            }
+            else getNameAndDeploy();
           } else {
             setSuccess(false);
-            setNoFile(true);
+            // setNoFile(true);
             setSwarmDeployState(0);
           }
         }}>
@@ -117,7 +111,7 @@ const DeploySwarm: React.FC<Props> = ({
       </p>
       <br></br>
 
-      <div>
+      <div id="add-stack-div">
         <label htmlFor="new-stack-name" id="new-stack-name-label">Stack Name</label>
         <input id="new-stack-name" name="new-stack-name" placeholder="Enter name...." onChange={(event) => { stackNameRef.current = event.target.value }}></input>
         <button 
@@ -158,6 +152,7 @@ const DeploySwarm: React.FC<Props> = ({
     toggleHidden(swarmDeployPopup);
     setSwarmDeployState(2);
     setAllStackNames([...allStackNames, stackNameRef.current]);
+    console.log('allStackNames', allStackNames);
 
     // await results from running dwarm deployment shell tasks 
     const returnedFromPromise = await runDockerSwarmDeployment(currentFile, stackNameRef.current);
@@ -186,10 +181,14 @@ const DeploySwarm: React.FC<Props> = ({
 
   const addStackToSwarm = async () => {
     toggleHidden(swarmDeployPopup);
-    // setSwarmDeployState(2);
+    setSwarmDeployState(2);
+    setAllStackNames([...allStackNames, stackNameRef.current]);
 
     const nextStackResults = await runDockerSwarmDeployStack(currentFile, stackNameRef.current);
     const stackList = await runCheckStack();
+
+    setSwarmDeployState(3);
+    toggleVisible(swarmDeployPopup);
 
     console.log('results from adding new stack: ', nextStackResults);
     console.log('docker stack ls: ', stackList);
@@ -201,7 +200,7 @@ const DeploySwarm: React.FC<Props> = ({
     toggleHidden(swarmDeployPopup);
     setSwarmExists(false);
     setSuccess(false);
-    if(currentFile === '') setNoFile(true);
+    // if(currentFile === '') setNoFile(true);
     runLeaveSwarm();
     setSwarmDeployState(1);
     setStackName('');
@@ -218,7 +217,7 @@ const DeploySwarm: React.FC<Props> = ({
         toggleVisible(swarmDeployPopup);
       }
     };
-  } else if (swarmExists && success) {
+  } else if (swarmExists) {
     swarmBtnTitle = 'Leave Swarm';
     swarmOnClick = () => {
       toggleHidden(swarmDeployPopup);
@@ -262,4 +261,4 @@ const DeploySwarm: React.FC<Props> = ({
   )
 };
 
-export default DeploySwarm;
+export default SwarmDeployment;

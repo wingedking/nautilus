@@ -7,6 +7,7 @@
   min-height: 650px;
   max-height: 100vh;
 
+  //Nautilus logo and "Open" button
   .top-half {
     grid-area: top-half;
 
@@ -84,6 +85,7 @@
     }
   }
 
+  //"Please select a container with details to display"
   .info-dropdown {
     padding: 0 1em 1em 1em;
     grid-area: info;
@@ -187,67 +189,3 @@
   }
 }
 
-.deployment-status {
-  display: inline-flex;
-  border-radius: 50%;
-  height: 25px;
-  width: 25px;
-  border: 1px solid;
-  font-size: 1.7em;
-  font-weight: bolder;
-  align-items: center;
-  justify-content: center;
-}
-
-.status-healthy {
-  border-color:  rgb(140,170,194);
-  background-color: rgb(140,170,194);
-  &.status-active {
-    background-color: rgb(9, 247, 9);
-  }
-}
-
-.status-moderate {
-  border-color:  rgb(140,170,194);
-  background-color: rgb(140,170,194);
-  &.status-active {
-    background-color: rgb(246, 246, 8);
-  }
-}
-.status-dead {
-  border-color:  rgb(140,170,194);
-  background-color: rgb(140,170,194);
-  &.status-active {
-    background-color: rgb(253, 7, 7);
-  }
-}
-
-.button-container:hover {
-  cursor: hand;
-  cursor: pointer;
-  color: $fifth-color;
-}
-
-.clickable-status:hover {
-  cursor: hand;
-  cursor: pointer;
-}
-
-.deployment-title:hover {
-  cursor: hand;
-  cursor: pointer; 
-}
-
-.status-container {
-  display: flex;
-  justify-content: space-evenly;
-  padding-left: 35%;
-  padding-right: 5%;
-  width: 8em;
-  color: white;
-}
-
-.button-container {
-  display: flex;
-  justify-content: center;
-}

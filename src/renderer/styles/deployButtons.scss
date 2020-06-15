@@ -1,0 +1,117 @@
+
+
+.deploy-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: initial;
+  color: white;
+  width: 100%;
+  text-align: center; 
+  margin-bottom: 8%;
+  align-items: center;
+
+  .deploy-btn {
+    background-color: rgb(223, 223, 223);
+    color: black;
+    padding-bottom: 7px;
+    padding-top: 7px;
+    padding-left: 0px;
+    padding-right:  0px;
+    outline: none;
+    font-size: 1.1em;
+    width: 85%;
+    border: none;
+    border-radius: 6px;
+    margin-bottom: 0.6em;
+    transition: background-color 0.2s;
+
+    .deployment-title {
+      font-size: 1em;    
+      padding-left: 0.5em;
+  }
+    .open-button{
+      float: left;
+      transform: translate(14px, 12px);
+      color: $primary-color;
+    }
+    .deployment-button{
+      float: left;
+      transform: translate(14px, 12px);
+      color: $primary-color;
+    }
+  
+    span {
+      margin-right: 5px;
+    }
+  
+    &:hover {
+      cursor: hand;
+      cursor: pointer;
+      color: black;
+      background-color: darken($fourth-color, 10%);
+    }
+    &:active {
+      background-color: darken($fourth-color, 25%);
+    }
+  }
+}
+
+#compose-deploy-div {
+  margin-bottom: 8%;
+}
+
+.deployment-status {
+  display: inline-flex;
+  border-radius: 50%;
+  height: 25px;
+  width: 25px;
+  border: 1px solid;
+  font-size: 1.7em;
+  font-weight: bolder;
+  align-items: center;
+  justify-content: center;
+}
+
+.status-healthy {
+  border-color:  rgb(140,170,194);
+  background-color: rgb(140,170,194);
+  &.status-active {
+    background-color: rgb(9, 247, 9);
+  }
+}
+
+.status-moderate {
+  border-color:  rgb(140,170,194);
+  background-color: rgb(140,170,194);
+  &.status-active {
+    background-color: rgb(246, 246, 8);
+  }
+}
+.status-dead {
+  border-color:  rgb(140,170,194);
+  background-color: rgb(140,170,194);
+  &.status-active {
+    background-color: rgb(253, 7, 7);
+  }
+}
+
+.button-container:hover {
+  cursor: hand;
+  cursor: pointer;
+  color: $fifth-color;
+}
+
+.clickable-status:hover {
+  cursor: hand;
+  cursor: pointer;
+}
+
+.deployment-title:hover {
+  cursor: hand;
+  cursor: pointer; 
+}
+
+.button-container {
+  display: flex;
+  justify-content: center;
+}

@@ -183,12 +183,10 @@ class App extends Component<{}, State> {
       ...this.state,
       ...tabState,
       openFiles,
-      // options
     }
     else newState = {
       ...this.state,
       ...tabState,
-      // options
     };
     // Set the 'state' item in localStorage to the tab state. This means that tab is the current tab, which would be used if the app got reloaded.
     localStorage.setItem('state', JSON.stringify(tabState));

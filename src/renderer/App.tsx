@@ -202,12 +202,14 @@ class App extends Component<{}, State> {
    * @description removes the tab corresponding to the given file path
    */
   closeTab: SwitchTab = (filePath: string) => {
-    // Grab current open files and remove the file path of the tab to be closed, assign the updated array to newOpenFiles
+    // Grab current open files and remove the file path of the tab to be closed, assign the 
+    // updated array to newOpenFiles
     const { openFiles, options } = this.state;
     const newOpenFiles = openFiles.filter(file => file != filePath);
     // Remove the state object associated with the file path in localStorage
     localStorage.removeItem(filePath);
-    // If the tab to be closed is the active tab, reset d3 and delete "state" object from local storage and set state to the initial state with the updated open files array included.
+    // If the tab to be closed is the active tab, reset d3 and delete "state" object from local 
+    // storage and set state to the initial state with the updated open files array included.
     if (filePath === this.state.filePath){
       // Remove the 'state' localStorage item, which represents the 
       // services of the currently opened file.

@@ -214,9 +214,9 @@ class App extends Component<{}, State> {
     if (filePath === this.state.filePath){
       // Remove the 'state' localStorage item, which represents the 
       // services of the currently opened file.
+      localStorage.removeItem('state');
       // Stop the simulation to prevent d3 transform errors related 
       // to 'tick' events
-      localStorage.removeItem('state');
       const { simulation } = window.d3State;
       simulation.stop();
       // If there are other open tabs, switch to the first open one

@@ -112,18 +112,19 @@ class App extends Component<{}, State> {
   };
 
   convertAndStoreYamlJSON = (yamlText: string, filePath: string) => {
-    // Make copy of current state;
+    // Convert Yaml to state object.
     const yamlJSON = yaml.safeLoad(yamlText);
     const yamlState = convertYamlToState(yamlJSON, filePath);
+    // Copy options and open files state
     const openFiles = this.state.openFiles.slice();
     const { options } = this.state
     // Don't add a file that is already opened to the openFiles array
     if (!openFiles.includes(filePath)) openFiles.push(filePath);
 
-    // set global variables for d3 simulation
+    // Set global variables for d3 simulation
     window.d3State = setD3State(yamlState.services);
 
-    // store opened file state in localStorage under the current state item call "state" as well as an individual item using the filePath as the key.
+    // Store opened file state in localStorage under the current state item call "state" as well as an individual item using the filePath as the key.
     localStorage.setItem('state', JSON.stringify(yamlState));
     localStorage.setItem(`${filePath}`, JSON.stringify(yamlState));
     this.setState({...initialState, ...yamlState,  openFiles, options });

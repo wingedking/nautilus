@@ -56,6 +56,16 @@
   }
 }
 
+.status-container {
+  display: flex;
+  justify-content: space-evenly;
+  padding-left: 35%;
+  padding-right: 5%;
+  width: 8em;
+  color: white;
+}
+
+
 #compose-deploy-div {
   margin-bottom: 8%;
 }

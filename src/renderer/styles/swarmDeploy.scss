@@ -150,7 +150,7 @@
 
     .success-div {
       width: 95%;
-      padding-top: 2em;
+      padding-top: 1.8em;
       flex-direction: column;
       justify-content: center;
       align-items: center;
@@ -165,12 +165,13 @@
         flex-direction: column;
         justify-content: center;
         align-items: center;
+        margin-top: -5%;
 
         #new-stack-name-label {
           color: teal;
-          font-size: 1.2em;
+          font-size: 1em;
           margin-top: 0.2em;
-          padding: 7px;
+          padding: 5px;
         }
 
         #add-stack-btn {

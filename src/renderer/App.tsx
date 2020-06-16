@@ -307,7 +307,7 @@ class App extends Component<{}, State> {
           fileOpen={this.fileOpen}
           selectedContainer={this.state.selectedContainer}
           service={this.state.services[this.state.selectedContainer]}
-          currentFile={this.state.filePath}
+          currentFilePath={this.state.filePath}
         />
         <div className="main flex">
           <OptionBar

@@ -37,33 +37,39 @@ const SwarmDeployment: React.FC<Props> = ({
   // TO DO - have different message from default error message
   // currently using default, but would be best to have a 'please open a file' message
   useEffect(() => {
-    if (currentFile && !swarmExists) {
+    if (currentFile && !swarmExists && !success) {
       setSwarmDeployState(1);
       setPopupContent(popupStartDiv);
-    } else if (currentFile && swarmExists) {
+    } else if (currentFile && swarmExists && success) {
       setSwarmDeployState(3);
       setPopupContent(successDiv);
-    } else if (!currentFile) {
+    } else if (!currentFile && swarmExists && success) {
+      setSwarmDeployState(3);
+      setPopupContent(errorDiv);
+    } else if (!currentFile && !swarmExists && !success) {
       setSwarmDeployState(0);
       setPopupContent(errorDiv);
+    } else if (swarmExists && success) {
+      setPopupContent(successDiv);
+    } else if (swarmExists && !success) {
+      setPopupContent(errorDiv);
     }
-  }, [currentFile, swarmExists]);
+  }, [currentFile, swarmExists, success]);
 
   // Once component has mounted, check for changes in state and update component
   // depending on change
   // if there's no swarm and there is a file, show popup with input and button
   // if swarm exists and deployment was successful, render success div
   // else if swarm exists but deployment was unsuccessful, render error message
-  useEffect(() => {
-    if (swarmExists && success) {
-      setPopupContent(successDiv);
-    } else if (swarmExists && !success) {
-      console.log("no success and swarm exists");
-      setPopupContent(errorDiv);
-    } else {
-      setPopupContent(popupStartDiv);
-    }
-  }, [success, swarmExists]);
+  // useEffect(() => {
+  //   if (swarmExists && success) {
+  //     setPopupContent(successDiv);
+  //   } else if (swarmExists && !success) {
+  //     setPopupContent(errorDiv);
+  //   } else if (!swarmExists) {
+  //     setPopupContent(popupStartDiv);
+  //   }
+  // }, [success, swarmExists]);
 
   // keep a variable for access to hidden div in order to toggle hidden/visible
   // may be better way to do this? // -> change to React best practice method of doing this
@@ -136,7 +142,7 @@ const SwarmDeployment: React.FC<Props> = ({
 
   // retrieve input from user and pass it to runDockerSwarmDeployment as an argument
   // the function will return stdout from running each function, so that we have access to that information
-  const getNameAndDeploy = async () => {    
+  const getNameAndDeploy = async (): Promise<any> => {    
     // hide pop-up while running commands
     toggleHidden(swarmDeployPopup);
     setSwarmDeployState(2);
@@ -146,7 +152,6 @@ const SwarmDeployment: React.FC<Props> = ({
     // await results from running dwarm deployment shell tasks 
     const returnedFromPromise = await runDockerSwarmDeployment(currentFile, stackNameRef.current);
     const infoReturned = JSON.parse(returnedFromPromise);
-    console.log('infoReturned: ', infoReturned);
     setInfoFromSwarm(infoReturned);
 
     // if there is no error on the returned object, swarm initialisation was successful 
@@ -168,7 +173,7 @@ const SwarmDeployment: React.FC<Props> = ({
     }
   };
 
-  const addStackToSwarm = async () => {
+  const addStackToSwarm = async (): Promise<any> => {
     toggleHidden(swarmDeployPopup);
     setSwarmDeployState(2);
     setAllStackNames([...allStackNames, stackNameRef.current]);

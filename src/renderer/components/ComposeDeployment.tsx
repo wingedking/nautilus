@@ -15,7 +15,8 @@ import { remote } from 'electron';
 import { 
   runDockerComposeDeployment,
   runDockerComposeKill,
-  runDockerComposeListContainer
+  runDockerComposeListContainer,
+  runSpawn
 } from '../../common/runShellTasks';
 
 import {
@@ -92,21 +93,19 @@ const Deployment: React.FC<Props> = ({ currentFilePath, fileOpen }) => {
     e.stopPropagation();
     const dialog = remote.dialog;
     dialog.showErrorBox('Error Message:', errorMessage);
+    runSpawn((data: any, fnKill: any) => {console.log(`${data}`); fnKill(); debugger});
   }
 
-  let title, onClick, icon = <FaUpload className="deployment-button" size={24} />;
+  let title, onClick = () => {}, icon = <FaUpload className="deployment-button" size={24} />;
 
   if(deployState === DeploymentStatus.NoFile){
     title = 'Deploy Container';
-    onClick = () => {};
   }
   else if(deployState === DeploymentStatus.OpeningFile){
     title = 'Opening File..';
-    onClick = () => {};
   }
   else if(deployState === DeploymentStatus.Checking){
     title = 'Checking..';
-    onClick = () => {};
   }
   else if(deployState === DeploymentStatus.Dead || deployState === DeploymentStatus.DeadError){
     title = "Deploy Container"
@@ -114,12 +113,10 @@ const Deployment: React.FC<Props> = ({ currentFilePath, fileOpen }) => {
   }
   else if(deployState === DeploymentStatus.Deploying){
     title = 'Deploying..';
-    onClick = () => {};
   }
   else if(deployState === DeploymentStatus.Undeploying){
     icon = <FaDownload className="open-button" size={24} />
     title = 'Undeploying..'
-    onClick = () => {}
   }
   else if (deployState === DeploymentStatus.Running || deployState === DeploymentStatus.Warning) {
     icon = <FaDownload className="open-button" size={24} />

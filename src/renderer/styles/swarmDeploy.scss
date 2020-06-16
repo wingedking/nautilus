@@ -44,7 +44,6 @@
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      // float: left;
       
       #stack-name-label {
         color: teal;
@@ -98,7 +97,7 @@
 
     .success-div {
       width: 95%;
-      padding-top: 3.5em;
+      padding-top: 1.8em;
       flex-direction: column;
       justify-content: center;
       align-items: center;
@@ -107,7 +106,31 @@
         color: green;
         font-size: 1.1em;
       }
+
+      #add-stack-div {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        margin-top: -5%;
+
+        #new-stack-name-label {
+          color: teal;
+          font-size: 1em;
+          margin-top: 0.2em;
+          padding: 5px;
+        }
+
+        #add-stack-btn {
+          background-color: teal;
+          color: white;
+          font-size: 1em;
+          width: 50%;
+          border-radius: 10px;
+        }
+      }
     }
   }
 
 }
+

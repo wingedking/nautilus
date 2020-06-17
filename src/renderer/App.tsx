@@ -126,7 +126,12 @@ class App extends Component<{}, State> {
     // Store opened file state in localStorage under the current state item call "state" as well as an individual item using the filePath as the key.
     localStorage.setItem('state', JSON.stringify(yamlState));
     localStorage.setItem(`${filePath}`, JSON.stringify(yamlState));
-    this.setState({...initialState, ...yamlState,  openFiles, options });
+    this.setState({
+      ...initialState,
+      ...yamlState,
+      openFiles,
+      options,
+    });
   };
 
   /**
@@ -280,7 +285,11 @@ class App extends Component<{}, State> {
           }
         }
       }
-      this.setState({...initialState, ...stateJS, openFiles});
+      this.setState({
+        ...initialState,
+        ...stateJS,
+        openFiles,
+      });
     }
   }
 

@@ -12,7 +12,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { FaUpload } from 'react-icons/fa';
 import Draggable from 'react-draggable';
-import Modal from 'react-modal';
 
 import { 
   runDockerSwarmDeployment,
@@ -20,8 +19,6 @@ import {
   runDockerSwarmDeployStack,
   runCheckStack } from '../../common/runShellTasks';
 import { Void } from '../App.d'
-
-Modal.setAppElement('#app');
 
 type Props = {
   currentFilePath: string,

@@ -44,7 +44,6 @@ const Deployment: React.FC<Props> = ({ currentFilePath, fileOpen }) => {
   const [ deployState, setDeployState ] = useState(DeploymentStatus.NoFile);
   const [ errorMessage, setErrorMessage ] = useState('');
 
-  console.log('compose', currentFilePath);
   useEffect(() => {
     if(currentFilePath !== '') deployCheck();
     else if(deployState !== DeploymentStatus.NoFile) setDeployState(DeploymentStatus.NoFile);

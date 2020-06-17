@@ -116,7 +116,7 @@ describe('Testing App Stateful Component', () => {
       yamlText = fs
         .readFileSync(path.resolve(__dirname, '../samples/docker-compose1.yml'))
         .toString();
-      wrapper.instance().convertAndStoreYamlJSON(yamlText);
+      wrapper.instance().convertAndStoreYamlJSON(yamlText, '');
     });
 
     afterAll(() => {

@@ -9,7 +9,8 @@ describe('Process Yaml File', () => {
     try {
       expect(
         runDockerComposeValidation(
-          path.resolve(__dirname, '../samples/docker-composeBAD.yml'), false
+          path.resolve(__dirname, '../samples/docker-composeBAD.yml'),
+          true,
         ),
       ).resolves.toMatchObject({
         out: '',

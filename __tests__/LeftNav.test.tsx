@@ -14,6 +14,7 @@ const props = {
   fileOpened: false,
   selectedContainer: '',
   service: {},
+  currentFilePath: '',
 };
 
 describe('test the functionality of LeftNav component', () => {

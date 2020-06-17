@@ -29,9 +29,9 @@ const SwarmDeployment: React.FC<Props> = ({ currentFilePath }) => {
   // Create React hooks to hold onto state
   const [success, setSuccess] = useState(false);
   const [swarmExists, setSwarmExists] = useState(false);
-  const [stdOutMessage, setStdOutMessage] = useState('');
+  // const [stdOutMessage, setStdOutMessage] = useState('');
   const [nodeAddress, setNodeAddress] = useState('');
-  const [infoFromSwarm, setInfoFromSwarm] = useState({});
+  // const [infoFromSwarm, setInfoFromSwarm] = useState({});
   const [swarmDeployState, setSwarmDeployState] = useState(0);
   const [popUpContent, setPopupContent] = useState(<div></div>);
   const [popupIsOpen, setPopupIsOpen] = useState(false);
@@ -91,7 +91,7 @@ const SwarmDeployment: React.FC<Props> = ({ currentFilePath }) => {
     )
       addStackToSwarm();
   };
-  
+
   // save html code in variables for easier access later
   // the default for the pop-up div, before any interaction with swarm / after leaving swarm
   const popupStartDiv = (
@@ -119,7 +119,9 @@ const SwarmDeployment: React.FC<Props> = ({ currentFilePath }) => {
     <div className="success-div">
       <p className="success-p">
         <span>Success! Your swarm has been deployed!</span>
-        <br></br>The current node <span className="success-msg-spans">{nodeAddress}</span><br></br>is now a manager
+        <br></br>The current node{' '}
+        <span className="success-msg-spans">{nodeAddress}</span>
+        <br></br>is now a manager
       </p>
       <br></br>
 
@@ -150,7 +152,7 @@ const SwarmDeployment: React.FC<Props> = ({ currentFilePath }) => {
         Sorry, there was an issue initializing your swarm
       </p>
       <button
-        className="try-again-btn" 
+        className="try-again-btn"
         onClick={() => {
           leaveSwarm();
         }}
@@ -174,17 +176,20 @@ const SwarmDeployment: React.FC<Props> = ({ currentFilePath }) => {
       stackNameRef.current,
     );
     const infoReturned = JSON.parse(returnedFromPromise);
-    setInfoFromSwarm(infoReturned);
+    // setInfoFromSwarm(infoReturned);
 
     // if there is no error on the returned object, swarm initialisation was successful
     if (!infoReturned.init.error) {
-      setStdOutMessage(infoReturned.init.out.split('\n')[0]);
-      console.log(stdOutMessage);
-      console.log(infoFromSwarm);
+      // const messageFromStdOut = infoReturned.init.out.split('\n')[0];
+      // setStdOutMessage(messageFromStdOut);
+      // console.log(stdOutMessage);
+      // console.log(infoFromSwarm);
       // the split here is to get just the 25-character node ID of the swarm
-      setNodeAddress(
-        infoReturned.init.out.split('\n')[0].split(' ')[4].replace(/[()]/g, ''),
-      );
+      const managerID = infoReturned.init.out
+        .split('\n')[0]
+        .split(' ')[4]
+        .replace(/[()]/g, '');
+      setNodeAddress(managerID);
       setSuccess(true);
       setSwarmExists(true);
       setSwarmDeployState(3);
@@ -272,13 +277,14 @@ const SwarmDeployment: React.FC<Props> = ({ currentFilePath }) => {
       </button>
 
       {/* If popupIsOpen state is set to true, render the popup div, else don't render anything here */}
-      { popupIsOpen ? (
-        <Draggable handle=".exit-popup-div"> 
+      {popupIsOpen ? (
+        <Draggable handle=".exit-popup-div">
           {/* <div className='top-edge' style={{height:"10px"}}></div> */}
           <div className="popup-div">
             <div className="exit-button-and-content-divs">
               <div className="exit-popup-div">
-                <button className="exit-popup-button"
+                <button
+                  className="exit-popup-button"
                   onClick={() => {
                     setPopupIsOpen(false);
                   }}

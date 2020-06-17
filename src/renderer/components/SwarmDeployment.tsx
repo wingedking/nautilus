@@ -279,7 +279,6 @@ const SwarmDeployment: React.FC<Props> = ({ currentFilePath }) => {
       {/* If popupIsOpen state is set to true, render the popup div, else don't render anything here */}
       {popupIsOpen ? (
         <Draggable handle=".exit-popup-div">
-          {/* <div className='top-edge' style={{height:"10px"}}></div> */}
           <div className="popup-div">
             <div className="exit-button-and-content-divs">
               <div className="exit-popup-div">

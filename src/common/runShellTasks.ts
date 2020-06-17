@@ -2,8 +2,12 @@
 import child_process from 'child_process';
 import { shellResults } from '../renderer/App.d'
 
-const runSpawn = (handleOnData: any) => {
-  const sp = child_process.spawn('docker', ['stats']);
+const runDockerStats = (handleOnData: Function, containerNames: string[]) => {
+  runSpawn(handleOnData, 'docker', containerNames);
+}
+
+const runSpawn = (handleOnData: Function, cmd: string, args: string[]) => {
+  const sp = child_process.spawn('docker', args);
 
   sp.stdout.on("data", data => {
     handleOnData(data, sp.kill.bind(sp));
@@ -102,5 +106,6 @@ export {
         runDockerSwarmInit, 
         runLeaveSwarm,
         runDockerSwarmDeployStack,
-        runSpawn
+        runSpawn,
+        runDockerStats
       };

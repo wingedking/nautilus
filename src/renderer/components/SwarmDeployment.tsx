@@ -10,7 +10,8 @@
  */
 
 import React, { useState, useEffect, useRef } from 'react';
-import { FaUpload } from 'react-icons/fa';
+import { FaUpload, FaRegPlayCircle } from 'react-icons/fa';
+import { GiHeartPlus } from 'react-icons/gi';
 import Draggable from 'react-draggable';
 
 import {
@@ -160,6 +161,9 @@ const SwarmDeployment: React.FC<Props> = ({ currentFilePath }) => {
       </button>
     </div>
   );
+  
+  const startButton = <FaRegPlayCircle className='start-button hidden' size={20} />
+  const healthIcon = <GiHeartPlus className='health-icon hidden' size={20} />;
 
   // retrieve input from user and pass it to runDockerSwarmDeployment as an argument
   // the function will return stdout from running each function, so that we have access to that information
@@ -254,6 +258,7 @@ const SwarmDeployment: React.FC<Props> = ({ currentFilePath }) => {
         </span>
         {swarmBtnTitle}
         <div className="status-container">
+          {startButton}{healthIcon}
           <span
             className={`deployment-status status-healthy ${
               swarmDeployState === 3 ? 'status-active' : ''

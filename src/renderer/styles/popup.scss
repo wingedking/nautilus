@@ -47,7 +47,7 @@
     align-items: center;
     // margin-left: 12%;
 
-    #initialize-swarm {
+    .initialize-swarm {
       display: flex;
       flex-direction: column;
       justify-content: center;
@@ -60,7 +60,7 @@
         padding: 7px;
       }
     
-      #stack-name {
+      .stack-name {
         border-radius: 10px;
         height: 1.5rem;
         font-size: 1em;
@@ -68,11 +68,11 @@
         margin-bottom: 6px;
       }
     
-      #stack-name:focus, textarea:focus, select:focus {
+      .stack-name:focus, textarea:focus, select:focus {
         outline: none;
       }
     
-      #create-swarm {
+      .create-swarm {
         background-color: teal;
         color: white;
         font-size: 1.2em;
@@ -122,14 +122,14 @@
         align-items: center;
         margin-top: -5%;
 
-        #new-stack-name-label {
+        .new-stack-name-label {
           color: teal;
           font-size: 1em;
           margin-top: 0.2em;
           padding: 5px;
         }
 
-        #add-stack-btn {
+        .add-stack-btn {
           background-color: teal;
           color: white;
           font-size: 1em;

@@ -160,14 +160,14 @@ const Nodes: React.FC<Props> = ({
     });
   }
 
-  const removePorts = () => {
+  const removePorts: () => void = () => {
     boxPorts.forEach((node) => node.remove());
     boxPortTexts.forEach((node) => node.remove());
     setBoxPorts([]);
     setBoxPortTexts([]);
   }
 
-  const addPorts = () => {
+  const addPorts: () => void = () => {
     const rx = 3;
     // size of rectangle
     const pWidth = 78;

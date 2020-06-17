@@ -133,7 +133,7 @@ export type SwitchTab = {
 
 };
 
-export type Deploy = {
+export type Void = {
   ():void
 }
 /**

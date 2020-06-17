@@ -249,14 +249,11 @@ class App extends Component<{}, State> {
   };
 
   componentDidMount() {
-    console.log('D3State: ', window.d3State)
-    console.log('ipcRenderer: ', ipcRenderer)
     if (ipcRenderer) {
       ipcRenderer.on('file-open-error-within-electron', (event, arg) => {
         this.handleFileOpenError(arg);
       });
       ipcRenderer.on('file-opened-within-electron', (event, arg) => {
-        console.log('arg: ', arg);
         this.convertAndStoreYamlJSON(arg, '');
       });
     }
@@ -283,9 +280,7 @@ class App extends Component<{}, State> {
           }
         }
       }
-      // Copy of initialState to enture we are not mutating it
-      const currentState = { ...initialState }
-      this.setState(Object.assign(currentState, stateJS, { openFiles }));
+      this.setState({...initialState, ...stateJS, openFiles});
     }
   }
 

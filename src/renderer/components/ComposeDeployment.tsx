@@ -96,55 +96,63 @@ const Deployment: React.FC<Props> = ({ currentFilePath, fileOpen }) => {
 
   let title, onClick, icon = <FaUpload className="deployment-button" size={24} />;
 
-  if(deployState === DeploymentStatus.NoFile){
+  if (deployState === DeploymentStatus.NoFile){
     title = 'Deploy Container';
     onClick = () => {};
   }
-  else if(deployState === DeploymentStatus.OpeningFile){
+  else if (deployState === DeploymentStatus.OpeningFile){
     title = 'Opening File..';
     onClick = () => {};
   }
-  else if(deployState === DeploymentStatus.Checking){
+  else if (deployState === DeploymentStatus.Checking){
     title = 'Checking..';
     onClick = () => {};
   }
-  else if(deployState === DeploymentStatus.Dead || deployState === DeploymentStatus.DeadError){
+  else if (
+    deployState === DeploymentStatus.Dead
+    || deployState === DeploymentStatus.DeadError
+    ) {
     title = "Deploy Container"
     onClick = deployCompose;
   }
-  else if(deployState === DeploymentStatus.Deploying){
+  else if (deployState === DeploymentStatus.Deploying){
     title = 'Deploying..';
     onClick = () => {};
   }
-  else if(deployState === DeploymentStatus.Undeploying){
+  else if (deployState === DeploymentStatus.Undeploying){
     icon = <FaDownload className="open-button" size={24} />
     title = 'Undeploying..'
     onClick = () => {}
   }
-  else if (deployState === DeploymentStatus.Running || deployState === DeploymentStatus.Warning) {
+  else if (
+    deployState === DeploymentStatus.Running
+    || deployState === DeploymentStatus.Warning
+    ) {
     icon = <FaDownload className="open-button" size={24} />
     title = 'Kill Container';
     onClick = deployKill;
   } 
 
-  let inputButton = <input type='file'
-  name='yaml'
-  accept=".yml,.yaml"
-  style={{ display: 'none' }}
-  onChange={(event: React.SyntheticEvent<HTMLInputElement>) => {
-    // make sure there was something selected
-    // console.log('FileSelector Event and event.currentTarget', event, event.currentTarget)
-    if (event.currentTarget) {
-      // make sure user opened a file
-      if (event.currentTarget.files) {
-        // fire fileOpen function on first file opened
-        // console.log('Event.currentTarget.file', event.currentTarget.files[0] )
-        setDeployState(DeploymentStatus.OpeningFile);
-        fileOpen(event.currentTarget.files[0]);
+  let inputButton = (
+  <input
+    type='file'
+    name='yaml'
+    accept=".yml,.yaml"
+    style={{ display: 'none' }}
+    onChange={(event: React.SyntheticEvent<HTMLInputElement>) => {
+      // make sure there was something selected
+      // console.log('FileSelector Event and event.currentTarget', event, event.currentTarget)
+      if (event.currentTarget) {
+        // make sure user opened a file
+        if (event.currentTarget.files) {
+          // fire fileOpen function on first file opened
+          // console.log('Event.currentTarget.file', event.currentTarget.files[0] )
+          setDeployState(DeploymentStatus.OpeningFile);
+          fileOpen(event.currentTarget.files[0]);
+        }
       }
-    }
   }}
-/>
+  />);
 
   return (
     <div className='deploy-container' id='compose-deploy-div'>

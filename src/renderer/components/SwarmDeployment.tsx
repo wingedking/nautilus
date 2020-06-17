@@ -12,6 +12,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { FaUpload } from 'react-icons/fa';
 import Draggable from 'react-draggable';
+import Modal from 'react-modal';
 
 import { 
   runDockerSwarmDeployment,
@@ -19,6 +20,8 @@ import {
   runDockerSwarmDeployStack,
   runCheckStack } from '../../common/runShellTasks';
 import { Deploy } from '../App.d'
+
+Modal.setAppElement('#app');
 
 type Props = {
   currentFilePath: string,
@@ -35,6 +38,7 @@ const SwarmDeployment: React.FC<Props> = ({
   const [infoFromSwarm, setInfoFromSwarm] = useState({});
   const [swarmDeployState, setSwarmDeployState] = useState(0);
   const [popUpContent, setPopupContent] = useState(<div></div>);
+  const [popupIsOpen, setPopupIsOpen] = useState(false);
   const [stackName, setStackName] = useState('');
   const [allStackNames, setAllStackNames] = useState([] as any);
   const stackNameRef = useRef(stackName);
@@ -77,9 +81,6 @@ const SwarmDeployment: React.FC<Props> = ({
   //   }
   // }, [success, swarmExists]);
 
-  // keep a variable for access to hidden div in order to toggle hidden/visible
-  // may be better way to do this? // -> change to React best practice method of doing this
-  const swarmDeployPopup: any = document.querySelector('.swarm-deploy-popup');
 
   // Submit Swarm name input on pressing 'enter'
   const handleKeyPress = (event: any) => {
@@ -151,20 +152,11 @@ const SwarmDeployment: React.FC<Props> = ({
       </button>
     </div>);
 
-  // change visibility of HTML element from hidden to visible or vice versa
-  // used for the popup box
-  const toggleVisible = (element: any): void => {
-    if (element) element.style.visibility = 'visible';
-  }
-  const toggleHidden = (element: any): void => {
-    if (element) element.style.visibility = 'hidden';
-  }
-
   // retrieve input from user and pass it to runDockerSwarmDeployment as an argument
   // the function will return stdout from running each function, so that we have access to that information
   const getNameAndDeploy: Deploy = async (): Promise<any> => {    
     // hide pop-up while running commands
-    toggleHidden(swarmDeployPopup);
+    setPopupIsOpen(false);
     setSwarmDeployState(2);
     setAllStackNames([...allStackNames, stackNameRef.current]);
 
@@ -183,17 +175,17 @@ const SwarmDeployment: React.FC<Props> = ({
       setSuccess(true);
       setSwarmExists(true);
       setSwarmDeployState(3);
-      toggleVisible(swarmDeployPopup);
+      setPopupIsOpen(true);
     } else {
       setSwarmExists(true);
       setSuccess(false);
       setSwarmDeployState(1);
-      toggleVisible(swarmDeployPopup);
+      setPopupIsOpen(true);
     }
   };
 
   const addStackToSwarm = async (): Promise<any> => {
-    toggleHidden(swarmDeployPopup);
+    setPopupIsOpen(false);
     setSwarmDeployState(2);
     setAllStackNames([...allStackNames, stackNameRef.current]);
 
@@ -201,7 +193,7 @@ const SwarmDeployment: React.FC<Props> = ({
     const stackList = await runCheckStack();
 
     setSwarmDeployState(3);
-    toggleVisible(swarmDeployPopup);
+    setPopupIsOpen(true);
 
     console.log('results from adding new stack: ', nextStackResults);
     console.log('docker stack ls: ', stackList);
@@ -210,7 +202,7 @@ const SwarmDeployment: React.FC<Props> = ({
   // function to allow the user to leave the swarm
   // called in onClicks
   const leaveSwarm = (): void => {
-    toggleHidden(swarmDeployPopup);
+    setPopupIsOpen(false);
     setSwarmExists(false);
     setSuccess(false);
     runLeaveSwarm();
@@ -227,14 +219,12 @@ const SwarmDeployment: React.FC<Props> = ({
   if (!swarmExists || swarmExists && !success) {
     swarmBtnTitle = 'Deploy to Swarm';
     swarmOnClick = () => {
-      if (swarmDeployPopup) {
-        toggleVisible(swarmDeployPopup);
-      }
+      setPopupIsOpen(true);
     };
   } else if (swarmExists) {
     swarmBtnTitle = 'Leave Swarm';
     swarmOnClick = () => {
-      toggleHidden(swarmDeployPopup);
+      setPopupIsOpen(false);
       leaveSwarm();
     }
   } 
@@ -253,25 +243,27 @@ const SwarmDeployment: React.FC<Props> = ({
         </div>
       </button>
 
-      <Draggable handle='.exit-swarm-deploy-div'> 
-        {/* <div className='top-edge' style={{height:"10px"}}></div> */}
-        <div className="swarm-deploy-popup">
-          <div className="button-and-other-divs">
-            <div className="exit-swarm-deploy-div">
-              <button className="exit-swarm-deploy-box"
-                onClick={() => {
-                  if (swarmDeployPopup) {
-                    toggleHidden(swarmDeployPopup);
-                }}}>X</button> 
-            </div>
+      { popupIsOpen ? 
+        <Draggable > 
+          {/* <div className='top-edge' style={{height:"10px"}}></div> */}
+          <div className="swarm-deploy-popup">
+            <div className="button-and-other-divs">
+              <div className="exit-swarm-deploy-div">
+                <button className="exit-swarm-deploy-box"
+                  onClick={() => {
+                    setPopupIsOpen(false);
+                  }}>X</button> 
+              </div>
 
-            <div className="popup-content-wrapper">    
-              {popUpContent}
-            </div>
+              <div className="popup-content-wrapper">    
+                {popUpContent}
+              </div>
 
+            </div>
           </div>
-        </div>
-      </Draggable>
+        </Draggable>
+        : null
+      }
     </div>
   )
 };

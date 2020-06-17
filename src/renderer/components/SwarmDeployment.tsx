@@ -4,7 +4,7 @@
  * @module  SwarmDeployment.tsx
  * @author Kim Wysocki
  * @date 5/30/20
- * @description component to deploy a Swarm, showing deployment state, and allowing user to name their stack 
+ * @description component to deploy stacks to Docker Swarm and show deployment state
  *
  * ************************************
  */
@@ -12,7 +12,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { FaUpload } from 'react-icons/fa';
 import Draggable from 'react-draggable';
-import Modal from 'react-modal';
 
 import { 
   runDockerSwarmDeployment,
@@ -20,8 +19,6 @@ import {
   runDockerSwarmDeployStack,
   runCheckStack } from '../../common/runShellTasks';
 import { Void } from '../App.d'
-
-Modal.setAppElement('#app');
 
 type Props = {
   currentFilePath: string,
@@ -84,17 +81,15 @@ const SwarmDeployment: React.FC<Props> = ({
 
   // Submit Swarm name input on pressing 'enter'
   const handleKeyPress = (event: any) => {
-    if(event.key === 'Enter'){
-      console.log('pressing enter')
-      handleClick(event)
+    if (event.key === 'Enter'){
+      handleClick(event);
     }
-  }
+  };
 
   const handleClick = (event: any) => {
     console.log('Event target', event.target.className)
     if (event.target.className === 'create-swarm' || event.target.className === 'stack-name') {
         if (currentFilePath) {
-          console.log('stackName inside onClick: ', stackNameRef.current);
           if (swarmExists) addStackToSwarm();
           else if (!swarmExists) getNameAndDeploy();
         } else {
@@ -103,8 +98,8 @@ const SwarmDeployment: React.FC<Props> = ({
         }
     }
     else if (event.target.className === 'add-stack-btn' || event.target.className === 'new-stack-name') addStackToSwarm();
-    
-  }
+  };
+
   // save html code in variables for easier access later
   // the default for the pop-up div, before any interaction with swarm / after leaving swarm
   const popupStartDiv = (
@@ -122,8 +117,8 @@ const SwarmDeployment: React.FC<Props> = ({
   const successDiv = (
     <div className="success-div">
       <p className="success-p">
-        <span className="success-msg-spans">Success! Your swarm has been deployed!</span>
-        <br></br>The current node <strong>{nodeAddress}</strong><br></br>is now a manager
+        <span>Success! Your swarm has been deployed!</span>
+        <br></br>The current node <span className="success-msg-spans">{nodeAddress}</span><br></br>is now a manager
       </p>
       <br></br>
 
@@ -138,7 +133,7 @@ const SwarmDeployment: React.FC<Props> = ({
       </div>
     </div>);
 
-  // if unsuccessful / if no active file, render error dive                          
+  // if unsuccessful / if no active file, render error div                          
   const errorDiv = (
     <div className="error-div">
       <p className="error-p">

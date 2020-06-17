@@ -13,14 +13,11 @@ import React, { useState, useEffect } from 'react';
 import { FaUpload, FaDownload, FaRegPlayCircle, FaRegStopCircle } from 'react-icons/fa';
 import { remote } from 'electron';
 import { GiHeartPlus } from 'react-icons/gi';
+
 import {
   runDockerComposeDeployment,
   runDockerComposeKill,
   runDockerComposeListContainer,
-<<<<<<< HEAD
-  runSpawn
-=======
->>>>>>> e21d90db1fc1a21b210c8e87884ce9e25322c764
 } from '../../common/runShellTasks';
 
 import { FileOpen, Void } from '../App.d';
@@ -102,12 +99,6 @@ const Deployment: React.FC<Props> = ({ currentFilePath, fileOpen }) => {
     e.stopPropagation();
     const dialog = remote.dialog;
     dialog.showErrorBox('Error Message:', errorMessage);
-<<<<<<< HEAD
-    runSpawn((data: any, fnKill: any) => {console.log(`${data}`); fnKill(); debugger});
-  }
-
-  let title, onClick = () => {}, icon = <FaUpload className="deployment-button" size={24} />;
-=======
   };
 
   let title,
@@ -117,21 +108,9 @@ const Deployment: React.FC<Props> = ({ currentFilePath, fileOpen }) => {
     const startButton = <FaRegPlayCircle className={`start-button ${deployState === DeploymentStatus.Running ? '' : 'hidden'}`} size={20} onClick={toggleStart} />
     const stopButton = <FaRegStopCircle className={`stop-button ${deployState === DeploymentStatus.Running ? '' : 'hidden'}`} size={20} onClick={toggleStart} />
     const toggleButton = healthCheckRunning ? stopButton : startButton
->>>>>>> e21d90db1fc1a21b210c8e87884ce9e25322c764
 
   if (deployState === DeploymentStatus.NoFile) {
     title = 'Deploy Container';
-<<<<<<< HEAD
-  }
-  else if(deployState === DeploymentStatus.OpeningFile){
-    title = 'Opening File..';
-  }
-  else if(deployState === DeploymentStatus.Checking){
-    title = 'Checking..';
-  }
-  else if(deployState === DeploymentStatus.Dead || deployState === DeploymentStatus.DeadError){
-    title = "Deploy Container"
-=======
     onClick = () => {};
   } else if (deployState === DeploymentStatus.OpeningFile) {
     title = 'Opening File..';
@@ -144,19 +123,9 @@ const Deployment: React.FC<Props> = ({ currentFilePath, fileOpen }) => {
     deployState === DeploymentStatus.DeadError
   ) {
     title = 'Deploy Container';
->>>>>>> e21d90db1fc1a21b210c8e87884ce9e25322c764
     onClick = deployCompose;
   } else if (deployState === DeploymentStatus.Deploying) {
     title = 'Deploying..';
-<<<<<<< HEAD
-  }
-  else if(deployState === DeploymentStatus.Undeploying){
-    icon = <FaDownload className="open-button" size={24} />
-    title = 'Undeploying..'
-  }
-  else if (deployState === DeploymentStatus.Running || deployState === DeploymentStatus.Warning) {
-    icon = <FaDownload className="open-button" size={24} />
-=======
     onClick = () => {};
   } else if (deployState === DeploymentStatus.Undeploying) {
     icon = <FaDownload className="open-button" size={24} />;
@@ -167,7 +136,6 @@ const Deployment: React.FC<Props> = ({ currentFilePath, fileOpen }) => {
     deployState === DeploymentStatus.Warning
   ) {
     icon = <FaDownload className="open-button" size={24} />;
->>>>>>> e21d90db1fc1a21b210c8e87884ce9e25322c764
     title = 'Kill Container';
     onClick = deployKill;
   }

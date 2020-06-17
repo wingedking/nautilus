@@ -4,7 +4,7 @@
 @import 'leftNav';
 @import 'd3Wrapper';
 @import 'tabBar';
-@import 'swarmDeploy';
+@import 'popup';
 @import 'deployButton';
 
 @font-face {
@@ -28,7 +28,7 @@ html * {
 
 body {
   font-size: 14px;
-  -webkit-user-select: none;
+  -webkit-user-select: text;
   margin: 0;
 }
 

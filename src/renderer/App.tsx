@@ -111,18 +111,19 @@ class App extends Component<{}, State> {
   };
 
   convertAndStoreYamlJSON = (yamlText: string, filePath: string) => {
-    // Make copy of current state;
+    // Convert Yaml to state object.
     const yamlJSON = yaml.safeLoad(yamlText);
     const yamlState = convertYamlToState(yamlJSON, filePath);
+    // Copy options and open files state
     const openFiles = this.state.openFiles.slice();
     const { options } = this.state
     // Don't add a file that is already opened to the openFiles array
     if (!openFiles.includes(filePath)) openFiles.push(filePath);
 
-    // set global variables for d3 simulation
+    // Set global variables for d3 simulation
     window.d3State = setD3State(yamlState.services);
 
-    // store opened file state in localStorage under the current state item call "state" as well as an individual item using the filePath as the key.
+    // Store opened file state in localStorage under the current state item call "state" as well as an individual item using the filePath as the key.
     localStorage.setItem('state', JSON.stringify(yamlState));
     localStorage.setItem(`${filePath}`, JSON.stringify(yamlState));
     this.setState({...initialState, ...yamlState,  openFiles, options });
@@ -182,12 +183,10 @@ class App extends Component<{}, State> {
       ...this.state,
       ...tabState,
       openFiles,
-      // options
     }
     else newState = {
       ...this.state,
       ...tabState,
-      // options
     };
     // Set the 'state' item in localStorage to the tab state. This means that tab is the current tab, which would be used if the app got reloaded.
     localStorage.setItem('state', JSON.stringify(tabState));
@@ -203,18 +202,20 @@ class App extends Component<{}, State> {
    * @description removes the tab corresponding to the given file path
    */
   closeTab: SwitchTab = (filePath: string) => {
-    // Grab current open files and remove the file path of the tab to be closed, assign the updated array to newOpenFiles
+    // Grab current open files and remove the file path of the tab to be closed, assign the 
+    // updated array to newOpenFiles
     const { openFiles, options } = this.state;
     const newOpenFiles = openFiles.filter(file => file != filePath);
     // Remove the state object associated with the file path in localStorage
     localStorage.removeItem(filePath);
-    // If the tab to be closed is the active tab, reset d3 and delete "state" object from local storage and set state to the initial state with the updated open files array included.
+    // If the tab to be closed is the active tab, reset d3 and delete "state" object from local 
+    // storage and set state to the initial state with the updated open files array included.
     if (filePath === this.state.filePath){
       // Remove the 'state' localStorage item, which represents the 
       // services of the currently opened file.
+      localStorage.removeItem('state');
       // Stop the simulation to prevent d3 transform errors related 
       // to 'tick' events
-      localStorage.removeItem('state');
       const { simulation } = window.d3State;
       simulation.stop();
       // If there are other open tabs, switch to the first open one
@@ -305,7 +306,7 @@ class App extends Component<{}, State> {
           fileOpen={this.fileOpen}
           selectedContainer={this.state.selectedContainer}
           service={this.state.services[this.state.selectedContainer]}
-          currentFile={this.state.filePath}
+          currentFilePath={this.state.filePath}
         />
         <div className="main flex">
           <OptionBar

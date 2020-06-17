@@ -1,43 +1,53 @@
 
-#compose-deploy-div {
-  margin-bottom: 8%;
-}
-
 //pop-up div
-#swarm-deploy-popup {
+.swarm-deploy-popup {
   visibility: hidden; 
   position: absolute; 
   width: 30em; 
   height: 15em; 
-  margin-left: 35%;
-  margin-top: -20%;
+  top: 40%;
+  left: 40%;
   background-color: #DfE9FD;
   border: solid 1px #013874;
-  border-radius: 20px;
+  // border-radius: 20px;
+  border-bottom-left-radius: 1em;
+  border-bottom-right-radius: 1em;
 
-  #button-and-other-divs {
+  .button-and-other-divs {
     // background-color: gainsboro;
     width: 100%;
     height: 100%;
     display: flex;
-    flex-direction: row-reverse;
+    flex-direction: column;
     // align-items: flex-start;
     justify-content: space-between;
   }
 
-  #exit-swarm-deploy-box {
+  .exit-swarm-deploy-box {
     margin-right: 0.4em;
     margin-top: 0.2em;
     background-color: red;
     color: white;
     font-size: 1.5em;
-    border-radius: 10px;
+    
   }
-
+  .exit-swarm-deploy-div {
+    background-color: $primary-color;
+    display: flex;
+    flex-direction: row-reverse;
+    button {
+      outline: none;
+      margin-bottom: 0.2em;
+      border: none;
+    }
+  }
   .popup-content-wrapper {
-    width: 95%;
-    height: 90%;
-    margin-left: 12%;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    // margin-left: 12%;
 
     #initialize-swarm {
       display: flex;
@@ -78,10 +88,10 @@
 
     .error-div {
       width: 90%;
-      padding-top: 5em;
       flex-direction: column;
       justify-content: center;
       align-items: center;
+      margin-bottom: 1em;
 
       .error-p {
         color: red;
@@ -96,8 +106,9 @@
     }
 
     .success-div {
-      width: 95%;
-      padding-top: 1.8em;
+      width: 100%;
+      height: 105%;
+      // padding-top: 1.8em;
       flex-direction: column;
       justify-content: center;
       align-items: center;
@@ -127,6 +138,7 @@
           font-size: 1em;
           width: 50%;
           border-radius: 10px;
+          margin: 1em;
         }
       }
     }

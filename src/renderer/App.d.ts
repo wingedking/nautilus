@@ -133,6 +133,9 @@ export type SwitchTab = {
 
 };
 
+export type Void = {
+  ():void
+}
 /**
  * **********************
  * D3 SIMULATION TYPES

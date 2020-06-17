@@ -275,7 +275,7 @@ const View: React.FC<Props> = ({
         .force('charge', d3.forceManyBody<SNode>().strength(-150))
         .force('collide', d3.forceCollide(radius / 1.3))
         .on('tick', ticked)
-        .restart()
+        .restart();
     }
 
     console.log('view d3 render line 281 View.tsx');

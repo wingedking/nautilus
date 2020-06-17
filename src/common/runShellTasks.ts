@@ -1,17 +1,17 @@
 /* eslint-disable */
 import child_process from 'child_process';
-import { shellResults } from '../renderer/App.d'
+import { shellResults } from '../renderer/App.d';
 
-const runDockerComposeKill = (filePath: string) => 
+const runDockerComposeKill = (filePath: string) =>
   runShell(`docker-compose -f ${filePath} kill`, false);
 
-const runDockerComposeListContainer = (filePath: string) => 
+const runDockerComposeListContainer = (filePath: string) =>
   runShell(`docker-compose -f ${filePath} ps`, false);
 
-const runDockerComposeDeployment = (filePath: string) => 
+const runDockerComposeDeployment = (filePath: string) =>
   runShell(`docker-compose -f ${filePath} up -d`, false);
 
-const runDockerComposeValidation = (filePath: string) => 
+const runDockerComposeValidation = (filePath: string) =>
   runShell(`docker-compose -f ${filePath} config`, true);
 
 const runDockerSwarmInit = (filePath: string) =>
@@ -20,19 +20,24 @@ const runDockerSwarmInit = (filePath: string) =>
 const runDockerSwarmDeployStack = (filePath: string, stackName: string) =>
   runShell(`docker stack deploy -c ${filePath} ${stackName}`, false);
 
-const runLeaveSwarm = () => 
-  runShell(`docker swarm leave -f`, false);
+const runLeaveSwarm = () => runShell(`docker swarm leave -f`, false);
 
-const runDockerSwarmDeployment = async (filePath: string, stackName: string) => {
+const runCheckStack = () => runShell(`docker stack ls`, false);
+
+const runDockerSwarmDeployment = async (
+  filePath: string,
+  stackName: string,
+) => {
   let stackDeployResult, initResult;
-  await runDockerSwarmInit(filePath).then((data) => initResult = data)
-          .then(() => runDockerSwarmDeployStack(filePath, stackName))
-          .then((info) => {
-            stackDeployResult = info;
-          });
+  await runDockerSwarmInit(filePath)
+    .then((data) => (initResult = data))
+    .then(() => runDockerSwarmDeployStack(filePath, stackName))
+    .then((info) => {
+      stackDeployResult = info;
+    });
 
-  return JSON.stringify({init: initResult, stackDeploy: stackDeployResult});
-}
+  return JSON.stringify({ init: initResult, stackDeploy: stackDeployResult });
+};
 
 const runShell = (cmd: string, filter: boolean) =>
   // promise for the electron application
@@ -50,7 +55,7 @@ const runShell = (cmd: string, filter: boolean) =>
           };
           if (error) {
             //if docker-compose uses env file to run, store this variable to handle later
-            if(filter){
+            if (filter) {
               if (error.message.includes('variable is not set')) {
                 shellResult.envResolutionRequired = true;
               }
@@ -64,8 +69,7 @@ const runShell = (cmd: string, filter: boolean) =>
               ) {
                 shellResult.error = error;
               }
-            }
-            else {
+            } else {
               shellResult.error = error;
             }
           }
@@ -75,13 +79,15 @@ const runShell = (cmd: string, filter: boolean) =>
     } catch {}
   });
 
-
 export default runShell;
-export { runDockerComposeDeployment, 
-        runDockerComposeValidation, 
-        runDockerComposeKill, 
-        runDockerComposeListContainer, 
-        runDockerSwarmDeployment, 
-        runDockerSwarmInit, 
-        runLeaveSwarm,
-        runDockerSwarmDeployStack };
+export {
+  runDockerComposeDeployment,
+  runDockerComposeValidation,
+  runDockerComposeKill,
+  runDockerComposeListContainer,
+  runDockerSwarmDeployment,
+  runDockerSwarmInit,
+  runLeaveSwarm,
+  runCheckStack,
+  runDockerSwarmDeployStack,
+};

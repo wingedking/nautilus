@@ -67,7 +67,6 @@ function wrap(text: d3.Selection<SVGTextElement, SNode, d3.BaseType, unknown>) {
   });
 }
 
-
 const Nodes: React.FC<Props> = ({
   setSelectedContainer,
   services,
@@ -75,10 +74,18 @@ const Nodes: React.FC<Props> = ({
   getColor,
 }) => {
   const { simulation, serviceGraph, treeDepth } = window.d3State;
-  const [boxPorts, setBoxPorts] = useState<d3.Selection<SVGRectElement, SNode, any, any>[] | []>([]);
-  const [boxPortTexts, setBoxPortTexts] = useState<d3.Selection<SVGTextElement, SNode, any, any>[] | []>([]);
-  const [boxVolumes, setBoxVolumes] = useState<d3.Selection<SVGSVGElement, SNode, any, any>[] | []>([]);
-  const [boxVolumesTexts, setBoxVolumesTexts] = useState<d3.Selection<SVGTextElement, SNode, any, any>[] | []>([]);
+  const [boxPorts, setBoxPorts] = useState<
+    d3.Selection<SVGRectElement, SNode, any, any>[] | []
+  >([]);
+  const [boxPortTexts, setBoxPortTexts] = useState<
+    d3.Selection<SVGTextElement, SNode, any, any>[] | []
+  >([]);
+  const [boxVolumes, setBoxVolumes] = useState<
+    d3.Selection<SVGSVGElement, SNode, any, any>[] | []
+  >([]);
+  const [boxVolumesTexts, setBoxVolumesTexts] = useState<
+    d3.Selection<SVGTextElement, SNode, any, any>[] | []
+  >([]);
 
   /** HELPER FUNCTIONS */
   const removeVolumes = () => {
@@ -86,7 +93,7 @@ const Nodes: React.FC<Props> = ({
     boxVolumesTexts.forEach((node) => node.remove());
     setBoxVolumes([]);
     setBoxVolumesTexts([]);
-  }
+  };
 
   const addVolumes = () => {
     const x = 0;
@@ -97,7 +104,7 @@ const Nodes: React.FC<Props> = ({
     let nodesWithVolumes: d3.Selection<SVGGElement, SNode, any, any>;
     const volumes: d3.Selection<SVGSVGElement, SNode, any, any>[] = [];
     const volumeText: d3.Selection<SVGTextElement, SNode, any, any>[] = [];
-      // select all nodes with volumes
+    // select all nodes with volumes
     nodesWithVolumes = d3
       .select('.nodes')
       .selectAll<SVGGElement, SNode>('.node')
@@ -126,7 +133,7 @@ const Nodes: React.FC<Props> = ({
           .attr('width', width + (d.volumes.length - i) * 20)
           .attr('height', height + (d.volumes.length - i) * 20)
           .attr('x', x - (d.volumes.length - i) * 10)
-          .attr('y', y- (d.volumes.length - i) * 10)
+          .attr('y', y - (d.volumes.length - i) * 10)
           .on('mouseover', () => {
             return vText.style('visibility', 'visible');
           })
@@ -158,16 +165,16 @@ const Nodes: React.FC<Props> = ({
       setBoxVolumes(volumes);
       setBoxVolumesTexts(volumeText);
     });
-  }
+  };
 
-  const removePorts = () => {
+  const removePorts: () => void = () => {
     boxPorts.forEach((node) => node.remove());
     boxPortTexts.forEach((node) => node.remove());
     setBoxPorts([]);
     setBoxPortTexts([]);
-  }
+  };
 
-  const addPorts = () => {
+  const addPorts: () => void = () => {
     const rx = 3;
     // size of rectangle
     const pWidth = 78;
@@ -183,13 +190,13 @@ const Nodes: React.FC<Props> = ({
     let nodesWithPorts: d3.Selection<SVGGElement, SNode, any, any>;
     const ports: d3.Selection<SVGRectElement, SNode, any, any>[] = [];
     const portText: d3.Selection<SVGTextElement, SNode, any, any>[] = [];
-  
+
     // select all nodes with ports
     nodesWithPorts = d3
       .select('.nodes')
       .selectAll<SVGGElement, SNode>('.node')
       .filter((d: SNode) => {
-        return d.ports.length > 0
+        return d.ports.length > 0;
       });
     // iterate through all nodes with ports
     nodesWithPorts.each(function (d: SNode) {
@@ -224,14 +231,14 @@ const Nodes: React.FC<Props> = ({
           .append('tspan')
           .text(pString)
           .attr('text-anchor', 'middle');
-  
+
         // store d3 object in ports text array
         portText.push(pText);
       });
     });
     setBoxPorts(ports);
     setBoxPortTexts(portText);
-  }
+  };
   /**
    *********************
    * RENDER NODES
@@ -315,8 +322,8 @@ const Nodes: React.FC<Props> = ({
       .attr('text-anchor', 'middle')
       .call(wrap);
 
-    if(options.ports) addPorts();
-    if(options.volumes) addVolumes();
+    if (options.ports) addPorts();
+    if (options.volumes) addVolumes();
 
     return () => {
       // remove containers when services change
@@ -325,26 +332,26 @@ const Nodes: React.FC<Props> = ({
   }, [services]);
 
   useEffect(() => {
-    if(options.ports) addPorts();
-    else if(boxPorts.length !== 0) removePorts();
+    if (options.ports) addPorts();
+    else if (boxPorts.length !== 0) removePorts();
 
     return () => {
       // before unmounting, if ports option was on, remove the ports
       if (options.ports) removePorts();
     };
-  }, [options.ports])
+  }, [options.ports]);
 
   useEffect(() => {
-    if(options.volumes) addVolumes();
-    else if(boxVolumes.length !== 0) removeVolumes();
+    if (options.volumes) addVolumes();
+    else if (boxVolumes.length !== 0) removeVolumes();
 
     return () => {
       // before unmounting, if volumes option was on, remove the ports
       if (options.volumes) removeVolumes();
     };
-  }, [options.volumes])
+  }, [options.volumes]);
 
-  return <g className="nodes"></g>
+  return <g className="nodes"></g>;
 };
 
 export default Nodes;

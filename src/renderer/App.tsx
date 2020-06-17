@@ -1,4 +1,3 @@
-/* eslint-disable */
 /**
  * ************************************
  *
@@ -58,14 +57,14 @@ const initialState: State = {
     volumes: false,
     selectAll: false,
   },
-  version: ''
+  version: '',
 };
 
 class App extends Component<{}, State> {
   constructor(props: {}) {
     super(props);
     // Copy of initial state object
-    this.state = {...initialState};
+    this.state = { ...initialState };
   }
 
   setSelectedContainer = (containerName: string) => {
@@ -112,21 +111,27 @@ class App extends Component<{}, State> {
   };
 
   convertAndStoreYamlJSON = (yamlText: string, filePath: string) => {
-    // Make copy of current state;
+    // Convert Yaml to state object.
     const yamlJSON = yaml.safeLoad(yamlText);
     const yamlState = convertYamlToState(yamlJSON, filePath);
+    // Copy options and open files state
     const openFiles = this.state.openFiles.slice();
-    const { options } = this.state
+    const { options } = this.state;
     // Don't add a file that is already opened to the openFiles array
     if (!openFiles.includes(filePath)) openFiles.push(filePath);
 
-    // set global variables for d3 simulation
+    // Set global variables for d3 simulation
     window.d3State = setD3State(yamlState.services);
 
-    // store opened file state in localStorage under the current state item call "state" as well as an individual item using the filePath as the key.
+    // Store opened file state in localStorage under the current state item call "state" as well as an individual item using the filePath as the key.
     localStorage.setItem('state', JSON.stringify(yamlState));
     localStorage.setItem(`${filePath}`, JSON.stringify(yamlState));
-    this.setState({...initialState, ...yamlState,  openFiles, options });
+    this.setState({
+      ...initialState,
+      ...yamlState,
+      openFiles,
+      options,
+    });
   };
 
   /**
@@ -137,7 +142,7 @@ class App extends Component<{}, State> {
    * ** if errors, passes error string to handle file open errors method
    */
   fileOpen: FileOpen = (file: File) => {
-    console.log('Opening file')
+    console.log('Opening file');
     const fileReader = new FileReader();
     // check for valid file path
     if (file.path) {
@@ -171,32 +176,29 @@ class App extends Component<{}, State> {
    * @description sets state to the state stored in localStorage of the file
    * associated with the given filePath.
    */
-  switchTab: SwitchTab = (
-    filePath: string,
-    openFiles?: Array<string>
-    ) => {
+  switchTab: SwitchTab = (filePath: string, openFiles?: Array<string>) => {
     // Extract the desired tab state from localStorage
     const tabState = JSON.parse(localStorage.getItem(filePath) || '{}');
     // Create new state object with the returned tab state
     let newState;
-    if (openFiles) newState = {
-      ...this.state,
-      ...tabState,
-      openFiles,
-      // options
-    }
-    else newState = {
-      ...this.state,
-      ...tabState,
-      // options
-    };
+    if (openFiles)
+      newState = {
+        ...this.state,
+        ...tabState,
+        openFiles,
+      };
+    else
+      newState = {
+        ...this.state,
+        ...tabState,
+      };
     // Set the 'state' item in localStorage to the tab state. This means that tab is the current tab, which would be used if the app got reloaded.
     localStorage.setItem('state', JSON.stringify(tabState));
 
     // Set the d3 state using the services extracted from the tabState and then setState
     window.d3State = setD3State(newState.services);
     this.setState(newState);
-  }
+  };
 
   /**
    * @param filePath -> string
@@ -204,28 +206,28 @@ class App extends Component<{}, State> {
    * @description removes the tab corresponding to the given file path
    */
   closeTab: SwitchTab = (filePath: string) => {
-    // Grab current open files and remove the file path of the tab to be closed, assign the updated array to newOpenFiles
+    // Grab current open files and remove the file path of the tab to be closed, assign the
+    // updated array to newOpenFiles
     const { openFiles, options } = this.state;
-    const newOpenFiles = openFiles.filter(file => file != filePath);
+    const newOpenFiles = openFiles.filter((file) => file != filePath);
     // Remove the state object associated with the file path in localStorage
     localStorage.removeItem(filePath);
-    // If the tab to be closed is the active tab, reset d3 and delete "state" object from local storage and set state to the initial state with the updated open files array included.
-    if (filePath === this.state.filePath){
-      // Remove the 'state' localStorage item, which represents the 
+    // If the tab to be closed is the active tab, reset d3 and delete "state" object from local
+    // storage and set state to the initial state with the updated open files array included.
+    if (filePath === this.state.filePath) {
+      // Remove the 'state' localStorage item, which represents the
       // services of the currently opened file.
-      // Stop the simulation to prevent d3 transform errors related 
-      // to 'tick' events
       localStorage.removeItem('state');
+      // Stop the simulation to prevent d3 transform errors related
+      // to 'tick' events
       const { simulation } = window.d3State;
       simulation.stop();
       // If there are other open tabs, switch to the first open one
       // If not, reset to initialState with selected options.
-      if (openFiles.length > 1 ) this.switchTab(newOpenFiles[0], newOpenFiles)
-      else this.setState({...initialState, options});
-      
-    }
-    else this.setState({...this.state, openFiles: newOpenFiles });
-  }
+      if (openFiles.length > 1) this.switchTab(newOpenFiles[0], newOpenFiles);
+      else this.setState({ ...initialState, options });
+    } else this.setState({ ...this.state, openFiles: newOpenFiles });
+  };
 
   /**
    * @param errorText -> string
@@ -235,8 +237,7 @@ class App extends Component<{}, State> {
   handleFileOpenError = (errorText: Error) => {
     // Stop the simulation to prevent hundreds of d3 transform errors from occuring. This is rare but its a simple fix to prevent it.
     const { simulation } = window.d3State;
-      simulation 
-        .stop();
+    simulation.stop();
     // Grab the current openFiles array so that we don't lose them when setting state.
     const openErrors = parseOpenError(errorText);
     const { openFiles } = this.state;
@@ -249,14 +250,11 @@ class App extends Component<{}, State> {
   };
 
   componentDidMount() {
-    console.log('D3State: ', window.d3State)
-    console.log('ipcRenderer: ', ipcRenderer)
     if (ipcRenderer) {
       ipcRenderer.on('file-open-error-within-electron', (event, arg) => {
         this.handleFileOpenError(arg);
       });
       ipcRenderer.on('file-opened-within-electron', (event, arg) => {
-        console.log('arg: ', arg);
         this.convertAndStoreYamlJSON(arg, '');
       });
     }
@@ -283,9 +281,11 @@ class App extends Component<{}, State> {
           }
         }
       }
-      // Copy of initialState to enture we are not mutating it
-      const currentState = { ...initialState }
-      this.setState(Object.assign(currentState, stateJS, { openFiles }));
+      this.setState({
+        ...initialState,
+        ...stateJS,
+        openFiles,
+      });
     }
   }
 
@@ -297,7 +297,7 @@ class App extends Component<{}, State> {
   }
 
   render() {
-   return (
+    return (
       <div className="app-class">
         {/* dummy div to create draggable bar at the top of application to replace removed native bar */}
         <div className="draggable" />
@@ -306,7 +306,7 @@ class App extends Component<{}, State> {
           fileOpen={this.fileOpen}
           selectedContainer={this.state.selectedContainer}
           service={this.state.services[this.state.selectedContainer]}
-          currentFile={this.state.filePath}
+          currentFilePath={this.state.filePath}
         />
         <div className="main flex">
           <OptionBar

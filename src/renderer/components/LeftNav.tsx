@@ -13,19 +13,17 @@ import React from 'react';
 // IMPORT REACT COMPONENTS
 import ServiceInfo from './ServiceInfo';
 import FileSelector from './FileSelector';
-import DeploySwarm from './SwarmDeployment';
-// import SwarmButtonCluster from '../../common/dockerSwarmDeployment';
+import ComposeDeployment from './ComposeDeployment';
+import ClusterDeployment from './ClusterDeployment';
 import Title from './Title';
 import { FileOpen, Service } from '../App.d';
-
-import ComposeDeployment from './ComposeDeployment';
 
 type Props = {
   service: Service;
   selectedContainer: string;
   fileOpen: FileOpen;
   fileOpened: boolean;
-  currentFile: string;
+  currentFilePath: string;
 };
 
 const LeftNav: React.FC<Props> = ({
@@ -33,7 +31,7 @@ const LeftNav: React.FC<Props> = ({
   fileOpened,
   selectedContainer,
   service,
-  currentFile
+  currentFilePath,
 }) => {
   return (
     <div className="left-nav">
@@ -42,8 +40,14 @@ const LeftNav: React.FC<Props> = ({
         {fileOpened ? <FileSelector fileOpen={fileOpen} /> : null}
       </div>
       <ServiceInfo selectedContainer={selectedContainer} service={service} />
-      <ComposeDeployment currentFilePath={currentFile} fileOpen={fileOpen}/>
-      <DeploySwarm currentFile={currentFile} />
+      <ComposeDeployment
+        currentFilePath={currentFilePath}
+        fileOpen={fileOpen}
+      />
+      <ClusterDeployment
+        currentFilePath={currentFilePath}
+        fileOpen={fileOpen}
+      />
     </div>
   );
 };

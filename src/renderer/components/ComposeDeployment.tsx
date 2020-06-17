@@ -13,6 +13,7 @@ import React, { useState, useEffect } from 'react';
 import { FaUpload, FaDownload, FaRegPlayCircle, FaRegStopCircle } from 'react-icons/fa';
 import { remote } from 'electron';
 import { GiHeartPlus } from 'react-icons/gi';
+
 import {
   runDockerComposeDeployment,
   runDockerComposeKill,

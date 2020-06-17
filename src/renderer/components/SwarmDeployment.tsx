@@ -122,12 +122,12 @@ const SwarmDeployment: React.FC<Props> = ({
   const successDiv = (
     <div className="success-div">
       <p className="success-p">
-        <span className="swarm-spans">Success! Your swarm has been deployed!</span>
-        <br></br>The current node {nodeAddress}<br></br>is now a manager
+        <span className="success-msg-spans">Success! Your swarm has been deployed!</span>
+        <br></br>The current node <strong>{nodeAddress}</strong><br></br>is now a manager
       </p>
       <br></br>
 
-      <div id="add-stack-div">
+      <div className="add-stack-div">
         <label htmlFor="new-stack-name" id="new-stack-name-label">Deploy Additional Stack</label>
         <input id="new-stack-name" name="new-stack-name" placeholder="Enter name...." onKeyPress={handleKeyPress} onChange={(event) => { stackNameRef.current = event.target.value }}></input>
         <button 
@@ -145,7 +145,7 @@ const SwarmDeployment: React.FC<Props> = ({
         Sorry, there was an issue initializing your swarm
       </p>
       <button
-        className="swarm-btn" 
+        className="try-again-btn" 
         onClick={() => {
           leaveSwarm();
         }}>Try Again
@@ -243,13 +243,14 @@ const SwarmDeployment: React.FC<Props> = ({
         </div>
       </button>
 
+      {/* If popupIsOpen state is set to true, render the popup div, else don't render anything here */}
       { popupIsOpen ? 
-        <Draggable > 
+        <Draggable handle=".exit-popup-div"> 
           {/* <div className='top-edge' style={{height:"10px"}}></div> */}
-          <div className="swarm-deploy-popup">
-            <div className="button-and-other-divs">
-              <div className="exit-swarm-deploy-div">
-                <button className="exit-swarm-deploy-box"
+          <div className="popup-div">
+            <div className="exit-button-and-content-divs">
+              <div className="exit-popup-div">
+                <button className="exit-popup-button"
                   onClick={() => {
                     setPopupIsOpen(false);
                   }}>X</button> 

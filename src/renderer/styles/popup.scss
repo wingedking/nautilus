@@ -1,6 +1,6 @@
 
 //pop-up div
-.swarm-deploy-popup {
+.popup-div {
   position: absolute; 
   width: 30em; 
   height: 15em; 
@@ -12,17 +12,16 @@
   border-bottom-left-radius: 1em;
   border-bottom-right-radius: 1em;
 
-  .button-and-other-divs {
+  .exit-button-and-content-divs {
     // background-color: gainsboro;
     width: 100%;
     height: 100%;
     display: flex;
     flex-direction: column;
-    // align-items: flex-start;
     justify-content: space-between;
   }
 
-  .exit-swarm-deploy-box {
+  .exit-popup-button {
     margin-right: 0.4em;
     margin-top: 0.2em;
     background-color: red;
@@ -30,7 +29,7 @@
     font-size: 1.5em;
     
   }
-  .exit-swarm-deploy-div {
+  .exit-popup-div {
     background-color: $primary-color;
     display: flex;
     flex-direction: row-reverse;
@@ -81,7 +80,7 @@
         border-radius: 10px;
       }
     }
-    .swarm-spans {
+    .success-msg-spans {
       margin-bottom: 1em
     }
 
@@ -95,7 +94,7 @@
       .error-p {
         color: red;
       }
-      .swarm-btn {
+      .try-again-btn {
         background-color: teal;
         color: white;
         font-size: 1.2em;
@@ -107,7 +106,6 @@
     .success-div {
       width: 100%;
       height: 105%;
-      // padding-top: 1.8em;
       flex-direction: column;
       justify-content: center;
       align-items: center;
@@ -117,7 +115,7 @@
         font-size: 1.1em;
       }
 
-      #add-stack-div {
+      .add-stack-div {
         display: flex;
         flex-direction: column;
         justify-content: center;

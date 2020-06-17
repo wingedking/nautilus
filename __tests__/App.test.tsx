@@ -106,7 +106,6 @@ describe('Testing App Stateful Component', () => {
     });
     it('should updated selectedNetwork to passed in string', () => {
       wrapper.instance().selectNetwork('dummy-network');
-      console.log('State****', wrapper.state());
       expect(wrapper.state().selectedNetwork).toBe('dummy-network');
     });
   });

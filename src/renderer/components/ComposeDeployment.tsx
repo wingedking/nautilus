@@ -10,7 +10,7 @@
  */
 
 import React, { useState, useEffect } from 'react';
-import { FaUpload, FaDownload } from 'react-icons/fa';
+import { FaUpload, FaDownload, FaRegPlayCircle, FaRegStopCircle } from 'react-icons/fa';
 import { remote } from 'electron';
 import { GiFirstAidKit } from 'react-icons/gi';
 import { 
@@ -43,6 +43,7 @@ type Props = {
 const Deployment: React.FC<Props> = ({ currentFilePath, fileOpen }) => {
   const [ deployState, setDeployState ] = useState(DeploymentStatus.NoFile);
   const [ errorMessage, setErrorMessage ] = useState('');
+  const [ healthCheckRunning, setHealthCheckRunning ] = useState(false);
 
   console.log('compose', currentFilePath);
   useEffect(() => {
@@ -70,8 +71,11 @@ const Deployment: React.FC<Props> = ({ currentFilePath, fileOpen }) => {
       });
     }
   };
-  const healthIconFunction = (e: React.MouseEvent) => {
-    console.log('health icon clicked')
+
+  //function definitions
+  const toggleStart = (e: React.MouseEvent) => {
+    healthCheckRunning ? setHealthCheckRunning(false): setHealthCheckRunning(true);
+    console.log('toggleStart invoked...healthCheckRunning=', healthCheckRunning);
     e.stopPropagation();
   }
 
@@ -99,8 +103,10 @@ const Deployment: React.FC<Props> = ({ currentFilePath, fileOpen }) => {
     dialog.showErrorBox('Error Message:', errorMessage);
   }
 
-  let title, onClick, icon = <FaUpload className="deployment-button" size={24} />;
-  const healthIcon = <GiFirstAidKit className="health-icon" size={24} />;
+  let title, onClick, icon = <FaUpload className="deployment-button" size={22} />;
+  const healthIcon = <GiFirstAidKit className={`${healthCheckRunning ? 'health-icon green' : 'health-icon '}`} size={24} />;
+  const startButton = <FaRegPlayCircle className={`start-button ${healthCheckRunning ? 'hidden' : ''}`} size={26} onClick={toggleStart} />
+  const stopButton = <FaRegStopCircle className={`stop-button ${healthCheckRunning ? '' : 'hidden'}`}  size={26} onClick={toggleStart} />
 
   if(deployState === DeploymentStatus.NoFile){
     title = 'Deploy Container';
@@ -123,12 +129,12 @@ const Deployment: React.FC<Props> = ({ currentFilePath, fileOpen }) => {
     onClick = () => {};
   }
   else if(deployState === DeploymentStatus.Undeploying){
-    icon = <FaDownload className="open-button" size={24} />
+    icon = <FaDownload className="open-button" size={22} />
     title = 'Undeploying..'
     onClick = () => {}
   }
   else if (deployState === DeploymentStatus.Running || deployState === DeploymentStatus.Warning) {
-    icon = <FaDownload className="open-button" size={24} />
+    icon = <FaDownload className="open-button" size={22} />
     title = 'Kill Container';
     onClick = deployKill;
   } 
@@ -157,9 +163,7 @@ const Deployment: React.FC<Props> = ({ currentFilePath, fileOpen }) => {
       <div onClick={onClick} className='deploy-btn'>
         {icon}
         <label className='deployment-title'>{title}{deployState === DeploymentStatus.NoFile ? inputButton : ''}</label>
-        <div onClick={healthIconFunction} className="health-icon-div" >
-          {healthIcon}
-        </div>
+          {startButton}{stopButton}{healthIcon}
         <div className='status-container'>
           <span className={`deployment-status status-healthy 
             ${deployState === DeploymentStatus.Running || 

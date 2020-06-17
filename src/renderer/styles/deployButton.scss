@@ -39,9 +39,6 @@
       transform: translate(14px, 12px);
       color: $primary-color;
     }
-    .health-icon{
-      color: $primary-color;
-    }
     span {
       margin-right: 5px;
     }
@@ -82,6 +79,17 @@
   font-weight: bolder;
   align-items: center;
   justify-content: center;
+}
+
+.start-button, .stop-button {
+  color: $primary-color;
+}
+
+.health-icon {
+  color: gray;
+  &.green {
+    color: rgb(6, 122, 6);
+  } 
 }
 
 .status-healthy {
@@ -126,4 +134,7 @@
 .button-container {
   display: flex;
   justify-content: center;
+}
+.hidden {
+  visibility: hidden;
 }

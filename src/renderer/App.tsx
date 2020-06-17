@@ -129,6 +129,7 @@ class App extends Component<{}, State> {
     this.setState({
       ...initialState,
       ...yamlState,
+      fileOpened: true,
       openFiles,
       options,
     });

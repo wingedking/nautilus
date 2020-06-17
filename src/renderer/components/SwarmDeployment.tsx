@@ -4,11 +4,7 @@
  * @module  SwarmDeployment.tsx
  * @author Kim Wysocki
  * @date 5/30/20
-<<<<<<< HEAD
  * @description component to deploy stacks to Docker Swarm and show deployment state
-=======
- * @description component to deploy a Swarm, showing deployment state, and allowing user to name their stack
->>>>>>> master
  *
  * ************************************
  */
@@ -21,14 +17,9 @@ import {
   runDockerSwarmDeployment,
   runLeaveSwarm,
   runDockerSwarmDeployStack,
-<<<<<<< HEAD
-  runCheckStack } from '../../common/runShellTasks';
-import { Void } from '../App.d'
-=======
   runCheckStack,
 } from '../../common/runShellTasks';
 import { Void } from '../App.d';
->>>>>>> master
 
 type Props = {
   currentFilePath: string;
@@ -79,6 +70,7 @@ const SwarmDeployment: React.FC<Props> = ({ currentFilePath }) => {
     }
   };
 
+  // handle click of buttons to add a stack to the swarm
   const handleClick = (event: any) => {
     console.log('Event target', event.target.className);
     if (
@@ -104,7 +96,7 @@ const SwarmDeployment: React.FC<Props> = ({ currentFilePath }) => {
   // the default for the pop-up div, before any interaction with swarm / after leaving swarm
   const popupStartDiv = (
     <div className="initialize-swarm">
-      <label htmlFor="stack-name" id="stack-name-label">
+      <label htmlFor="stack-name" className="stack-name-label">
         Stack Name
       </label>
       <input

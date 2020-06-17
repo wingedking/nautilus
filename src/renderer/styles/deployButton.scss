@@ -82,14 +82,17 @@
   justify-content: center;
 }
 
-.start-button, .stop-button {
-  color: $primary-color;
-  // padding: 2px 2px;
+.start-button {
+  color: rgb(190, 77, 255);
+  // padding-left: 4px;
+}
+.stop-button {
+  color: red;
+  // padding-left: 4px;
 }
 
 .health-icon {
-  // padding: 2px 2px;
-  color: rgb(140,170,194);
+  color: $primary-color;
   &.green {
     color: rgb(6, 122, 6);
   } 

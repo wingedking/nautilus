@@ -104,9 +104,9 @@ const Deployment: React.FC<Props> = ({ currentFilePath, fileOpen }) => {
   }
 
   let title, onClick, icon = <FaUpload className="deployment-button" size={24} />;
-  const healthIcon = <GiHeartPlus className={`${healthCheckRunning ? 'health-icon green' : 'health-icon '}`} size={28} />;
-  const startButton = <FaRegPlayCircle className='start-button' size={18} onClick={toggleStart} />
-  const stopButton = <FaRegStopCircle className='stop-button' size={18} onClick={toggleStart} />
+  const healthIcon = <GiHeartPlus className={`health-icon ${deployState === DeploymentStatus.Running ? '' : 'hidden'}`} size={20} />;
+  const startButton = <FaRegPlayCircle className={`start-button ${deployState === DeploymentStatus.Running ? '' : 'hidden'}`} size={20} onClick={toggleStart} />
+  const stopButton = <FaRegStopCircle className={`stop-button ${deployState === DeploymentStatus.Running ? '' : 'hidden'}`} size={20} onClick={toggleStart} />
   const toggleButton = healthCheckRunning ? stopButton : startButton
 
 
@@ -166,9 +166,7 @@ const Deployment: React.FC<Props> = ({ currentFilePath, fileOpen }) => {
         {icon}
         <label className='deployment-title'>{title}{deployState === DeploymentStatus.NoFile ? inputButton : ''}</label>
         <div className='status-container'>
-          <div className={`onSuccess ${deployState === DeploymentStatus.Running ? '' : 'hidden'}`}>
             {healthIcon}{toggleButton}
-          </div>
           <span className={`deployment-status status-healthy 
             ${deployState === DeploymentStatus.Running || 
               deployState === DeploymentStatus.Warning ? 'status-active' : ''}`}>

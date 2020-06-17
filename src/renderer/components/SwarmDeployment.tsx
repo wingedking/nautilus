@@ -147,7 +147,6 @@ const SwarmDeployment: React.FC<Props> = ({
     toggleHidden(swarmDeployPopup);
     setSwarmDeployState(2);
     setAllStackNames([...allStackNames, stackNameRef.current]);
-    console.log('allStackNames', allStackNames);
 
     // await results from running dwarm deployment shell tasks 
     const returnedFromPromise = await runDockerSwarmDeployment(currentFile, stackNameRef.current);

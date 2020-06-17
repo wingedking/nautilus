@@ -18,7 +18,7 @@ import {
   runLeaveSwarm,
   runDockerSwarmDeployStack,
   runCheckStack } from '../../common/runShellTasks';
-import { Deploy } from '../App.d'
+import { Void } from '../App.d'
 
 type Props = {
   currentFilePath: string,
@@ -90,8 +90,8 @@ const SwarmDeployment: React.FC<Props> = ({
   }
 
   const handleClick = (event: any) => {
-    console.log('Event target', event.target.id)
-    if (event.target.id === 'create-swarm' || event.target.id === 'stack-name') {
+    console.log('Event target', event.target.className)
+    if (event.target.className === 'create-swarm' || event.target.className === 'stack-name') {
         if (currentFilePath) {
           console.log('stackName inside onClick: ', stackNameRef.current);
           if (swarmExists) addStackToSwarm();
@@ -101,17 +101,17 @@ const SwarmDeployment: React.FC<Props> = ({
         setSwarmDeployState(0);
         }
     }
-    else if (event.target.id === 'add-stack-btn' || event.target.id === 'new-stack-name') addStackToSwarm();
+    else if (event.target.className === 'add-stack-btn' || event.target.className === 'new-stack-name') addStackToSwarm();
     
   }
   // save html code in variables for easier access later
   // the default for the pop-up div, before any interaction with swarm / after leaving swarm
   const popupStartDiv = (
-    <div id="initialize-swarm">
+    <div className="initialize-swarm">
       <label htmlFor="stack-name" id="stack-name-label">Stack Name</label>
-      <input id="stack-name" name="stack-name" placeholder="Enter name...." onKeyPress={handleKeyPress} onChange={(event) => { stackNameRef.current = event.target.value }}></input>
+      <input className='stack-name' name="stack-name" placeholder="Enter name...." onKeyPress={handleKeyPress} onChange={(event) => { stackNameRef.current = event.target.value }}></input>
       <button 
-        id="create-swarm" 
+        className='create-swarm' 
         onClick={handleClick}>
         Create Swarm
       </button>
@@ -126,11 +126,11 @@ const SwarmDeployment: React.FC<Props> = ({
       </p>
       <br></br>
 
-      <div id="add-stack-div">
-        <label htmlFor="new-stack-name" id="new-stack-name-label">Deploy Additional Stack</label>
-        <input id="new-stack-name" name="new-stack-name" placeholder="Enter name...." onKeyPress={handleKeyPress} onChange={(event) => { stackNameRef.current = event.target.value }}></input>
+      <div className="add-stack-div">
+        <label htmlFor="new-stack-name" className="new-stack-name-label">Deploy Additional Stack</label>
+        <input className="new-stack-name" name="new-stack-name" placeholder="Enter name...." onKeyPress={handleKeyPress} onChange={(event) => { stackNameRef.current = event.target.value }}></input>
         <button 
-          id="add-stack-btn"
+          className="add-stack-btn"
           onClick={handleClick}>
             Add new stack
         </button>
@@ -162,7 +162,7 @@ const SwarmDeployment: React.FC<Props> = ({
 
   // retrieve input from user and pass it to runDockerSwarmDeployment as an argument
   // the function will return stdout from running each function, so that we have access to that information
-  const getNameAndDeploy: Deploy = async (): Promise<any> => {    
+  const getNameAndDeploy: Void = async (): Promise<any> => {    
     // hide pop-up while running commands
     toggleHidden(swarmDeployPopup);
     setSwarmDeployState(2);

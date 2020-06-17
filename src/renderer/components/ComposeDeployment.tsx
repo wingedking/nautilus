@@ -19,7 +19,8 @@ import {
 } from '../../common/runShellTasks';
 
 import {
-  FileOpen
+  FileOpen,
+  Void,
 } from '../App.d';
 
 enum DeploymentStatus {
@@ -49,7 +50,7 @@ const Deployment: React.FC<Props> = ({ currentFilePath, fileOpen }) => {
     else if(deployState !== DeploymentStatus.NoFile) setDeployState(DeploymentStatus.NoFile);
   }, [currentFilePath]);
 
-  const deployCheck = () => {
+  const deployCheck: Void = () => {
     if(deployState === DeploymentStatus.OpeningFile && currentFilePath !== ''){
       deployCompose();
     }
@@ -70,7 +71,7 @@ const Deployment: React.FC<Props> = ({ currentFilePath, fileOpen }) => {
     }
   };
 
-  const deployCompose = () => {
+  const deployCompose: Void = () => {
     setDeployState(DeploymentStatus.Deploying)
     runDockerComposeDeployment(currentFilePath)
       .then((results: any) => { 
@@ -83,12 +84,12 @@ const Deployment: React.FC<Props> = ({ currentFilePath, fileOpen }) => {
     .catch(err => console.log('err', err));
   }
 
-  const deployKill = () => {
+  const deployKill: Void = () => {
     runDockerComposeKill(currentFilePath).then(() => setDeployState(DeploymentStatus.Dead));
     setDeployState(DeploymentStatus.Undeploying);
   }
 
-  const onErrorClick = (e: React.MouseEvent) => {
+  const onErrorClick = (e: React.MouseEvent):void => {
     e.stopPropagation();
     const dialog = remote.dialog;
     dialog.showErrorBox('Error Message:', errorMessage);

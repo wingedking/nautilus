@@ -15,11 +15,11 @@ import Draggable from 'react-draggable';
 import { runDockerSwarmDeployment, runLeaveSwarm, runDockerSwarmDeployStack, runCheckStack } from '../../common/runShellTasks';
 
 type Props = {
-  currentFile: string,
+  currentFilePath: string,
 };
 
 const SwarmDeployment: React.FC<Props> = ({
-  currentFile
+  currentFilePath
 }) => {
   // Create React hooks to hold onto state
   const [success, setSuccess] = useState(false);
@@ -37,16 +37,16 @@ const SwarmDeployment: React.FC<Props> = ({
   // TO DO - have different message from default error message
   // currently using default, but would be best to have a 'please open a file' message
   useEffect(() => {
-    if (currentFile && !swarmExists && !success) {
+    if (currentFilePath && !swarmExists && !success) {
       setSwarmDeployState(1);
       setPopupContent(popupStartDiv);
-    } else if (currentFile && swarmExists && success) {
+    } else if (currentFilePath && swarmExists && success) {
       setSwarmDeployState(3);
       setPopupContent(successDiv);
-    } else if (!currentFile && swarmExists && success) {
+    } else if (!currentFilePath && swarmExists && success) {
       setSwarmDeployState(3);
       setPopupContent(errorDiv);
-    } else if (!currentFile && !swarmExists && !success) {
+    } else if (!currentFilePath && !swarmExists && !success) {
       setSwarmDeployState(0);
       setPopupContent(errorDiv);
     } else if (swarmExists && success) {
@@ -54,7 +54,7 @@ const SwarmDeployment: React.FC<Props> = ({
     } else if (swarmExists && !success) {
       setPopupContent(errorDiv);
     }
-  }, [currentFile, swarmExists, success]);
+  }, [currentFilePath, swarmExists, success]);
 
   // Once component has mounted, check for changes in state and update component
   // depending on change
@@ -84,7 +84,7 @@ const SwarmDeployment: React.FC<Props> = ({
       <button 
         id="create-swarm" 
         onClick={() => { 
-          if (currentFile) {
+          if (currentFilePath) {
             console.log('stackName inside onClick: ', stackNameRef.current);
             if (swarmExists) addStackToSwarm();
             else if (!swarmExists) getNameAndDeploy();
@@ -150,7 +150,7 @@ const SwarmDeployment: React.FC<Props> = ({
     console.log('allStackNames', allStackNames);
 
     // await results from running dwarm deployment shell tasks 
-    const returnedFromPromise = await runDockerSwarmDeployment(currentFile, stackNameRef.current);
+    const returnedFromPromise = await runDockerSwarmDeployment(currentFilePath, stackNameRef.current);
     const infoReturned = JSON.parse(returnedFromPromise);
     setInfoFromSwarm(infoReturned);
 
@@ -178,7 +178,7 @@ const SwarmDeployment: React.FC<Props> = ({
     setSwarmDeployState(2);
     setAllStackNames([...allStackNames, stackNameRef.current]);
 
-    const nextStackResults = await runDockerSwarmDeployStack(currentFile, stackNameRef.current);
+    const nextStackResults = await runDockerSwarmDeployStack(currentFilePath, stackNameRef.current);
     const stackList = await runCheckStack();
 
     setSwarmDeployState(3);

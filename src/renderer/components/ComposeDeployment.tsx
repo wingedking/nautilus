@@ -12,6 +12,7 @@
 import React, { useState, useEffect } from 'react';
 import { FaUpload, FaDownload } from 'react-icons/fa';
 import { remote } from 'electron';
+import { GiFirstAidKit } from 'react-icons/gi';
 import { 
   runDockerComposeDeployment,
   runDockerComposeKill,
@@ -69,6 +70,10 @@ const Deployment: React.FC<Props> = ({ currentFilePath, fileOpen }) => {
       });
     }
   };
+  const healthIconFunction = (e: React.MouseEvent) => {
+    console.log('health icon clicked')
+    e.stopPropagation();
+  }
 
   const deployCompose = () => {
     setDeployState(DeploymentStatus.Deploying)
@@ -95,6 +100,7 @@ const Deployment: React.FC<Props> = ({ currentFilePath, fileOpen }) => {
   }
 
   let title, onClick, icon = <FaUpload className="deployment-button" size={24} />;
+  const healthIcon = <GiFirstAidKit className="health-icon" size={24} />;
 
   if(deployState === DeploymentStatus.NoFile){
     title = 'Deploy Container';
@@ -151,6 +157,9 @@ const Deployment: React.FC<Props> = ({ currentFilePath, fileOpen }) => {
       <div onClick={onClick} className='deploy-btn'>
         {icon}
         <label className='deployment-title'>{title}{deployState === DeploymentStatus.NoFile ? inputButton : ''}</label>
+        <div onClick={healthIconFunction} className="health-icon-div" >
+          {healthIcon}
+        </div>
         <div className='status-container'>
           <span className={`deployment-status status-healthy 
             ${deployState === DeploymentStatus.Running || 

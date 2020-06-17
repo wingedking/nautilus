@@ -14,10 +14,9 @@ import React from 'react';
 import ServiceInfo from './ServiceInfo';
 import FileSelector from './FileSelector';
 import ComposeDeployment from './ComposeDeployment';
-import ClusterDeployment from './ClusterDeployment'
+import ClusterDeployment from './ClusterDeployment';
 import Title from './Title';
 import { FileOpen, Service } from '../App.d';
-
 
 type Props = {
   service: Service;
@@ -32,7 +31,7 @@ const LeftNav: React.FC<Props> = ({
   fileOpened,
   selectedContainer,
   service,
-  currentFilePath
+  currentFilePath,
 }) => {
   return (
     <div className="left-nav">
@@ -41,8 +40,14 @@ const LeftNav: React.FC<Props> = ({
         {fileOpened ? <FileSelector fileOpen={fileOpen} /> : null}
       </div>
       <ServiceInfo selectedContainer={selectedContainer} service={service} />
-      <ComposeDeployment currentFilePath={currentFilePath} fileOpen={fileOpen}/>
-      <ClusterDeployment currentFilePath={currentFilePath} fileOpen={fileOpen}/>
+      <ComposeDeployment
+        currentFilePath={currentFilePath}
+        fileOpen={fileOpen}
+      />
+      <ClusterDeployment
+        currentFilePath={currentFilePath}
+        fileOpen={fileOpen}
+      />
     </div>
   );
 };

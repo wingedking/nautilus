@@ -9,27 +9,23 @@
  * ************************************
  */
 
- import React from 'react'
+import React from 'react';
 
 import SwarmDeployment from './SwarmDeployment';
 import { FileOpen } from '../App.d';
- 
+
 type Props = {
   fileOpen: FileOpen;
   currentFilePath: string;
- }
- 
-const ClusterDeployment: React.FC<Props> = ({
-  fileOpen,
-  currentFilePath,
-}) => {
-   return (
-     <div>
+};
+
+const ClusterDeployment: React.FC<Props> = ({ fileOpen, currentFilePath }) => {
+  return (
+    <div>
       <SwarmDeployment currentFilePath={currentFilePath} />
       {/* <KubeDeployment currentFilePath={currentFilePath} /> */}
-     </div>
-   )
- }
+    </div>
+  );
+};
 
- export default ClusterDeployment
- 
+export default ClusterDeployment;

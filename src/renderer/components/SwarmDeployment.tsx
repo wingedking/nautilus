@@ -4,7 +4,7 @@
  * @module  SwarmDeployment.tsx
  * @author Kim Wysocki
  * @date 5/30/20
- * @description component to deploy a Swarm, showing deployment state, and allowing user to name their stack 
+ * @description component to deploy a Swarm, showing deployment state, and allowing user to name their stack
  *
  * ************************************
  */
@@ -13,20 +13,19 @@ import React, { useState, useEffect, useRef } from 'react';
 import { FaUpload } from 'react-icons/fa';
 import Draggable from 'react-draggable';
 
-import { 
+import {
   runDockerSwarmDeployment,
   runLeaveSwarm,
   runDockerSwarmDeployStack,
-  runCheckStack } from '../../common/runShellTasks';
-import { Void } from '../App.d'
+  runCheckStack,
+} from '../../common/runShellTasks';
+import { Void } from '../App.d';
 
 type Props = {
-  currentFilePath: string,
+  currentFilePath: string;
 };
 
-const SwarmDeployment: React.FC<Props> = ({
-  currentFilePath
-}) => {
+const SwarmDeployment: React.FC<Props> = ({ currentFilePath }) => {
   // Create React hooks to hold onto state
   const [success, setSuccess] = useState(false);
   const [swarmExists, setSwarmExists] = useState(false);
@@ -63,112 +62,130 @@ const SwarmDeployment: React.FC<Props> = ({
     }
   }, [currentFilePath, swarmExists, success]);
 
-  // Once component has mounted, check for changes in state and update component
-  // depending on change
-  // if there's no swarm and there is a file, show popup with input and button
-  // if swarm exists and deployment was successful, render success div
-  // else if swarm exists but deployment was unsuccessful, render error message
-  // useEffect(() => {
-  //   if (swarmExists && success) {
-  //     setPopupContent(successDiv);
-  //   } else if (swarmExists && !success) {
-  //     setPopupContent(errorDiv);
-  //   } else if (!swarmExists) {
-  //     setPopupContent(popupStartDiv);
-  //   }
-  // }, [success, swarmExists]);
-
-
   // Submit Swarm name input on pressing 'enter'
   const handleKeyPress = (event: any) => {
-    if(event.key === 'Enter'){
-      console.log('pressing enter')
-      handleClick(event)
+    if (event.key === 'Enter') {
+      console.log('pressing enter');
+      handleClick(event);
     }
-  }
+  };
 
   const handleClick = (event: any) => {
-    console.log('Event target', event.target.className)
-    if (event.target.className === 'create-swarm' || event.target.className === 'stack-name') {
-        if (currentFilePath) {
-          console.log('stackName inside onClick: ', stackNameRef.current);
-          if (swarmExists) addStackToSwarm();
-          else if (!swarmExists) getNameAndDeploy();
-        } else {
+    console.log('Event target', event.target.className);
+    if (
+      event.target.className === 'create-swarm' ||
+      event.target.className === 'stack-name'
+    ) {
+      if (currentFilePath) {
+        console.log('stackName inside onClick: ', stackNameRef.current);
+        if (swarmExists) addStackToSwarm();
+        else if (!swarmExists) getNameAndDeploy();
+      } else {
         setSuccess(false);
         setSwarmDeployState(0);
-        }
-    }
-    else if (event.target.className === 'add-stack-btn' || event.target.className === 'new-stack-name') addStackToSwarm();
-    
-  }
+      }
+    } else if (
+      event.target.className === 'add-stack-btn' ||
+      event.target.className === 'new-stack-name'
+    )
+      addStackToSwarm();
+  };
   // save html code in variables for easier access later
   // the default for the pop-up div, before any interaction with swarm / after leaving swarm
   const popupStartDiv = (
     <div className="initialize-swarm">
-      <label htmlFor="stack-name" id="stack-name-label">Stack Name</label>
-      <input className='stack-name' name="stack-name" placeholder="Enter name...." onKeyPress={handleKeyPress} onChange={(event) => { stackNameRef.current = event.target.value }}></input>
-      <button 
-        className='create-swarm' 
-        onClick={handleClick}>
+      <label htmlFor="stack-name" id="stack-name-label">
+        Stack Name
+      </label>
+      <input
+        className="stack-name"
+        name="stack-name"
+        placeholder="Enter name...."
+        onKeyPress={handleKeyPress}
+        onChange={(event) => {
+          stackNameRef.current = event.target.value;
+        }}
+      ></input>
+      <button className="create-swarm" onClick={handleClick}>
         Create Swarm
       </button>
-    </div>);
-  
+    </div>
+  );
+
   // render this div if successful joining swarm
   const successDiv = (
     <div className="success-div">
       <p className="success-p">
-        <span className="swarm-spans">Success! Your swarm has been deployed!</span>
-        <br></br>The current node {nodeAddress}<br></br>is now a manager
+        <span className="swarm-spans">
+          Success! Your swarm has been deployed!
+        </span>
+        <br></br>The current node {nodeAddress}
+        <br></br>is now a manager
       </p>
       <br></br>
 
       <div className="add-stack-div">
-        <label htmlFor="new-stack-name" className="new-stack-name-label">Deploy Additional Stack</label>
-        <input className="new-stack-name" name="new-stack-name" placeholder="Enter name...." onKeyPress={handleKeyPress} onChange={(event) => { stackNameRef.current = event.target.value }}></input>
-        <button 
-          className="add-stack-btn"
-          onClick={handleClick}>
-            Add new stack
+        <label htmlFor="new-stack-name" className="new-stack-name-label">
+          Deploy Additional Stack
+        </label>
+        <input
+          className="new-stack-name"
+          name="new-stack-name"
+          placeholder="Enter name...."
+          onKeyPress={handleKeyPress}
+          onChange={(event) => {
+            stackNameRef.current = event.target.value;
+          }}
+        ></input>
+        <button className="add-stack-btn" onClick={handleClick}>
+          Add new stack
         </button>
       </div>
-    </div>);
+    </div>
+  );
 
-  // if unsuccessful / if no active file, render error dive                          
+  // if unsuccessful / if no active file, render error dive
   const errorDiv = (
     <div className="error-div">
       <p className="error-p">
         Sorry, there was an issue initializing your swarm
       </p>
       <button
-        className="swarm-btn" 
+        className="swarm-btn"
         onClick={() => {
           leaveSwarm();
-        }}>Try Again
+        }}
+      >
+        Try Again
       </button>
-    </div>);
+    </div>
+  );
 
   // retrieve input from user and pass it to runDockerSwarmDeployment as an argument
   // the function will return stdout from running each function, so that we have access to that information
-  const getNameAndDeploy: Void = async (): Promise<any> => {    
+  const getNameAndDeploy: Void = async (): Promise<any> => {
     // hide pop-up while running commands
     setPopupIsOpen(false);
     setSwarmDeployState(2);
     setAllStackNames([...allStackNames, stackNameRef.current]);
 
-    // await results from running dwarm deployment shell tasks 
-    const returnedFromPromise = await runDockerSwarmDeployment(currentFilePath, stackNameRef.current);
+    // await results from running dwarm deployment shell tasks
+    const returnedFromPromise = await runDockerSwarmDeployment(
+      currentFilePath,
+      stackNameRef.current,
+    );
     const infoReturned = JSON.parse(returnedFromPromise);
     setInfoFromSwarm(infoReturned);
 
-    // if there is no error on the returned object, swarm initialisation was successful 
+    // if there is no error on the returned object, swarm initialisation was successful
     if (!infoReturned.init.error) {
       setStdOutMessage(infoReturned.init.out.split('\n')[0]);
       console.log(stdOutMessage);
       console.log(infoFromSwarm);
       // the split here is to get just the 25-character node ID of the swarm
-      setNodeAddress(infoReturned.init.out.split('\n')[0].split(' ')[4].replace(/[()]/g, ''));
+      setNodeAddress(
+        infoReturned.init.out.split('\n')[0].split(' ')[4].replace(/[()]/g, ''),
+      );
       setSuccess(true);
       setSwarmExists(true);
       setSwarmDeployState(3);
@@ -186,7 +203,10 @@ const SwarmDeployment: React.FC<Props> = ({
     setSwarmDeployState(2);
     setAllStackNames([...allStackNames, stackNameRef.current]);
 
-    const nextStackResults = await runDockerSwarmDeployStack(currentFilePath, stackNameRef.current);
+    const nextStackResults = await runDockerSwarmDeployStack(
+      currentFilePath,
+      stackNameRef.current,
+    );
     const stackList = await runCheckStack();
 
     setSwarmDeployState(3);
@@ -194,7 +214,7 @@ const SwarmDeployment: React.FC<Props> = ({
 
     console.log('results from adding new stack: ', nextStackResults);
     console.log('docker stack ls: ', stackList);
-  }
+  };
 
   // function to allow the user to leave the swarm
   // called in onClicks
@@ -207,13 +227,13 @@ const SwarmDeployment: React.FC<Props> = ({
     setNodeAddress('');
     setStackName('');
     setAllStackNames([]);
-  }
+  };
 
   // uninitialised variable allowing the values to change depending on state
   // used for swarm deploy button in leftNav
   let swarmBtnTitle: string | undefined, swarmOnClick: any;
 
-  if (!swarmExists || swarmExists && !success) {
+  if (!swarmExists || (swarmExists && !success)) {
     swarmBtnTitle = 'Deploy to Swarm';
     swarmOnClick = () => {
       setPopupIsOpen(true);
@@ -223,46 +243,58 @@ const SwarmDeployment: React.FC<Props> = ({
     swarmOnClick = () => {
       setPopupIsOpen(false);
       leaveSwarm();
-    }
-  } 
+    };
+  }
   //exit-swarm-deploy-div
   return (
-    <div className="deploy-container" > 
-      <button
-        className="deploy-btn"
-        onClick={swarmOnClick}>
-            <span><FaUpload className="deployment-button" size={24} /></span>
-              {swarmBtnTitle}
-        <div className='status-container'>
-          <span className={`deployment-status status-healthy ${swarmDeployState === 3 ? 'status-active' : ''}`}></span>
-          <span className={`deployment-status status-moderate ${swarmDeployState === 2 ? 'status-active' : ''}`}></span>
-          <span className={`deployment-status status-dead ${swarmDeployState === 1 ? 'status-active' : ''}`}></span>
+    <div className="deploy-container">
+      <button className="deploy-btn" onClick={swarmOnClick}>
+        <span>
+          <FaUpload className="deployment-button" size={24} />
+        </span>
+        {swarmBtnTitle}
+        <div className="status-container">
+          <span
+            className={`deployment-status status-healthy ${
+              swarmDeployState === 3 ? 'status-active' : ''
+            }`}
+          ></span>
+          <span
+            className={`deployment-status status-moderate ${
+              swarmDeployState === 2 ? 'status-active' : ''
+            }`}
+          ></span>
+          <span
+            className={`deployment-status status-dead ${
+              swarmDeployState === 1 ? 'status-active' : ''
+            }`}
+          ></span>
         </div>
       </button>
 
-      { popupIsOpen ? 
-        <Draggable > 
+      {popupIsOpen ? (
+        <Draggable>
           {/* <div className='top-edge' style={{height:"10px"}}></div> */}
           <div className="swarm-deploy-popup">
             <div className="button-and-other-divs">
               <div className="exit-swarm-deploy-div">
-                <button className="exit-swarm-deploy-box"
+                <button
+                  className="exit-swarm-deploy-box"
                   onClick={() => {
                     setPopupIsOpen(false);
-                  }}>X</button> 
+                  }}
+                >
+                  X
+                </button>
               </div>
 
-              <div className="popup-content-wrapper">    
-                {popUpContent}
-              </div>
-
+              <div className="popup-content-wrapper">{popUpContent}</div>
             </div>
           </div>
         </Draggable>
-        : null
-      }
+      ) : null}
     </div>
-  )
+  );
 };
 
 export default SwarmDeployment;

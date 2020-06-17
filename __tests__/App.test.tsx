@@ -119,16 +119,12 @@ describe('Testing App Stateful Component', () => {
           path.resolve(__dirname, '../samples/docker-compose.dur.yml'),
         )
         .toString();
-<<<<<<< HEAD
-      wrapper.instance().convertAndStoreYamlJSON(yamlText, '');
-=======
       wrapper
         .instance()
         .convertAndStoreYamlJSON(
           yamlText,
           'C:/Users/davex/DocumentsLocal/Code/Codesmith/nautilus/samples/docker-compose.dur.yml)',
         );
->>>>>>> master
     });
 
     afterAll(() => {

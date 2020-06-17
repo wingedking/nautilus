@@ -1,12 +1,11 @@
-/* eslint-disable */
 import child_process from 'child_process';
 import { shellResults } from '../renderer/App.d'
 
-const runDockerStats = (handleOnData: Function, containerNames: string[]) => {
+const runDockerStats = (handleOnData: Function, containerNames: Array<string>) => {
   runSpawn(handleOnData, 'docker', containerNames);
 }
 
-const runSpawn = (handleOnData: Function, cmd: string, args: string[]) => {
+const runSpawn = (handleOnData: Function, cmd: string, args: Array<string>) => {
   const sp = child_process.spawn('docker', args);
 
   sp.stdout.on("data", data => {

@@ -203,17 +203,11 @@ const SwarmDeployment: React.FC<Props> = ({ currentFilePath }) => {
     setSwarmDeployState(2);
     setAllStackNames([...allStackNames, stackNameRef.current]);
 
-    const nextStackResults = await runDockerSwarmDeployStack(
-      currentFilePath,
-      stackNameRef.current,
-    );
-    const stackList = await runCheckStack();
+    await runDockerSwarmDeployStack(currentFilePath, stackNameRef.current);
+    await runCheckStack();
 
     setSwarmDeployState(3);
     setPopupIsOpen(true);
-
-    console.log('results from adding new stack: ', nextStackResults);
-    console.log('docker stack ls: ', stackList);
   };
 
   // function to allow the user to leave the swarm

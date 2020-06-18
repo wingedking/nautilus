@@ -9,7 +9,8 @@ describe('Process Yaml File', () => {
     try {
       expect(
         runDockerComposeValidation(
-          path.resolve(__dirname, '../samples/docker-composeBAD.yml'), false
+          path.resolve(__dirname, '../samples/docker-composeBAD.yml'),
+          false,
         ),
       ).resolves.toMatchObject({
         out: '',
@@ -35,7 +36,10 @@ describe('Process Yaml File', () => {
     const correctYamlState = JSON.parse(
       fs.readFileSync(path.resolve(__dirname, './yamlState.json')).toString(),
     );
-    const yamlState = convertYamlToState({}, yamlJS);
+    const yamlState = convertYamlToState(
+      yamlJS,
+      path.resolve(__dirname, '../samples/docker-compose.bpc.yml'),
+    );
     expect(yamlState).toEqual(correctYamlState);
   });
 });

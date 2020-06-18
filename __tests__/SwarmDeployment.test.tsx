@@ -16,7 +16,7 @@ describe('Swarm Deployment component', () => {
 
     it('should have a pop-up box that contains further actions/information', () => {
       wrapper.find('.deploy-btn').simulate('click');
-      expect(wrapper.find('.swarm-deploy-popup')).toHaveLength(1);
+      expect(wrapper.find('.popup-div')).toHaveLength(1);
     });
 
     //it('should show the error message when no is file open', () => {

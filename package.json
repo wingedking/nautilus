@@ -100,7 +100,7 @@
   },
   "homepage": "https://github.com/oslabs-beta/nautilus#readme",
   "dependencies": {
-    "@babel/polyfill": "^7.10.1",
+    "@babel/runtime-corejs3": "^7.10.2",
     "babel-polyfill": "^6.26.0",
     "d3": "^5.15.0",
     "electron-devtools-installer": "^2.2.4",

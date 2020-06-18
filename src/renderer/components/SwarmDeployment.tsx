@@ -4,7 +4,7 @@
  * @module  SwarmDeployment.tsx
  * @author Kim Wysocki
  * @date 5/30/20
- * @description component to deploy a Swarm, showing deployment state, and allowing user to name their stack
+ * @description component to deploy stacks to Docker Swarm and show deployment state
  *
  * ************************************
  */
@@ -30,9 +30,8 @@ const SwarmDeployment: React.FC<Props> = ({ currentFilePath }) => {
   // Create React hooks to hold onto state
   const [success, setSuccess] = useState(false);
   const [swarmExists, setSwarmExists] = useState(false);
-  const [stdOutMessage, setStdOutMessage] = useState('');
+  const [joinToken, setJoinToken] = useState('');
   const [nodeAddress, setNodeAddress] = useState('');
-  const [infoFromSwarm, setInfoFromSwarm] = useState({});
   const [swarmDeployState, setSwarmDeployState] = useState(0);
   const [popUpContent, setPopupContent] = useState(<div></div>);
   const [popupIsOpen, setPopupIsOpen] = useState(false);
@@ -66,19 +65,17 @@ const SwarmDeployment: React.FC<Props> = ({ currentFilePath }) => {
   // Submit Swarm name input on pressing 'enter'
   const handleKeyPress = (event: any) => {
     if (event.key === 'Enter') {
-      console.log('pressing enter');
       handleClick(event);
     }
   };
 
+  // handle click of buttons to add a stack to the swarm
   const handleClick = (event: any) => {
-    console.log('Event target', event.target.className);
     if (
       event.target.className === 'create-swarm' ||
       event.target.className === 'stack-name'
     ) {
       if (currentFilePath) {
-        console.log('stackName inside onClick: ', stackNameRef.current);
         if (swarmExists) addStackToSwarm();
         else if (!swarmExists) getNameAndDeploy();
       } else {
@@ -91,11 +88,12 @@ const SwarmDeployment: React.FC<Props> = ({ currentFilePath }) => {
     )
       addStackToSwarm();
   };
+
   // save html code in variables for easier access later
   // the default for the pop-up div, before any interaction with swarm / after leaving swarm
   const popupStartDiv = (
     <div className="initialize-swarm">
-      <label htmlFor="stack-name" id="stack-name-label">
+      <label htmlFor="stack-name" className="stack-name-label">
         Stack Name
       </label>
       <input
@@ -117,11 +115,15 @@ const SwarmDeployment: React.FC<Props> = ({ currentFilePath }) => {
   const successDiv = (
     <div className="success-div">
       <p className="success-p">
-        <span className="swarm-spans">
-          Success! Your swarm has been deployed!
-        </span>
-        <br></br>The current node {nodeAddress}
-        <br></br>is now a manager
+        <span>Success!</span>
+        <br></br>
+        The current node
+        <span className="success-msg-spans"> {nodeAddress} </span>
+        is now a manager
+      </p>
+      <p className="join-token-p">
+        Join swarm from a different machine using: <br></br>
+        <span className="success-msg-spans">{joinToken}</span>
       </p>
       <br></br>
 
@@ -152,7 +154,7 @@ const SwarmDeployment: React.FC<Props> = ({ currentFilePath }) => {
         Sorry, there was an issue initializing your swarm
       </p>
       <button
-        className="swarm-btn"
+        className="try-again-btn"
         onClick={() => {
           leaveSwarm();
         }}
@@ -179,17 +181,18 @@ const SwarmDeployment: React.FC<Props> = ({ currentFilePath }) => {
       stackNameRef.current,
     );
     const infoReturned = JSON.parse(returnedFromPromise);
-    setInfoFromSwarm(infoReturned);
 
     // if there is no error on the returned object, swarm initialisation was successful
     if (!infoReturned.init.error) {
-      setStdOutMessage(infoReturned.init.out.split('\n')[0]);
-      console.log(stdOutMessage);
-      console.log(infoFromSwarm);
-      // the split here is to get just the 25-character node ID of the swarm
-      setNodeAddress(
-        infoReturned.init.out.split('\n')[0].split(' ')[4].replace(/[()]/g, ''),
-      );
+      // Save token for joining, to allow user to copy and use
+      const tokenForJoiningSwarm = infoReturned.init.out.split('\n')[4].trim();
+      setJoinToken(tokenForJoiningSwarm);
+      // the split here is to get just the 25-character node ID of the swarm manager node
+      const managerID = infoReturned.init.out
+        .split('\n')[0]
+        .split(' ')[4]
+        .replace(/[()]/g, '');
+      setNodeAddress(managerID);
       setSuccess(true);
       setSwarmExists(true);
       setSwarmDeployState(3);
@@ -202,7 +205,7 @@ const SwarmDeployment: React.FC<Props> = ({ currentFilePath }) => {
     }
   };
 
-  const addStackToSwarm = async (): Promise<any> => {
+  const addStackToSwarm: Void = async (): Promise<any> => {
     setPopupIsOpen(false);
     setSwarmDeployState(2);
     setAllStackNames([...allStackNames, stackNameRef.current]);
@@ -216,13 +219,14 @@ const SwarmDeployment: React.FC<Props> = ({ currentFilePath }) => {
 
   // function to allow the user to leave the swarm
   // called in onClicks
-  const leaveSwarm = (): void => {
+  const leaveSwarm: Void = (): void => {
     setPopupIsOpen(false);
     setSwarmExists(false);
     setSuccess(false);
     runLeaveSwarm();
     setSwarmDeployState(1);
     setNodeAddress('');
+    setJoinToken('');
     setStackName('');
     setAllStackNames([]);
   };
@@ -271,14 +275,14 @@ const SwarmDeployment: React.FC<Props> = ({ currentFilePath }) => {
         </div>
       </button>
 
+      {/* If popupIsOpen state is set to true, render the popup div, else don't render anything here */}
       {popupIsOpen ? (
-        <Draggable>
-          {/* <div className='top-edge' style={{height:"10px"}}></div> */}
-          <div className="swarm-deploy-popup">
-            <div className="button-and-other-divs">
-              <div className="exit-swarm-deploy-div">
+        <Draggable handle=".exit-popup-div">
+          <div className="popup-div">
+            <div className="exit-button-and-content-divs">
+              <div className="exit-popup-div">
                 <button
-                  className="exit-swarm-deploy-box"
+                  className="exit-popup-button"
                   onClick={() => {
                     setPopupIsOpen(false);
                   }}

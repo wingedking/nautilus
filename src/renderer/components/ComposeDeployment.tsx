@@ -78,7 +78,6 @@ const Deployment: React.FC<Props> = ({ currentFilePath, fileOpen }) => {
     } else {
       setDeployState(DeploymentStatus.Checking);
       runDockerComposeListContainer(currentFilePath).then((results: any) => {
-        console.log(results);
         if (results.error) {
           setErrorMessage(results.error.message);
           setDeployState(DeploymentStatus.DeadError);
@@ -93,7 +92,6 @@ const Deployment: React.FC<Props> = ({ currentFilePath, fileOpen }) => {
   //function definitions
   useEffect(() => {
     if (healthCheck === HealthCheck.Loading && !healthKillFn) {
-      console.log('duran');
       runDockerComposeListContainer(currentFilePath).then((results: any) => {
         const outputLines = results.out.split('\n');
         const containerNames = [];
@@ -132,7 +130,6 @@ const Deployment: React.FC<Props> = ({ currentFilePath, fileOpen }) => {
     if (healthCheck === HealthCheck.Loading) setHealthCheck(HealthCheck.On);
 
     const outputLines = data.toString().split('\n');
-    console.log('outputlines', outputLines);
     if (outputLines.length !== containerNames.length + 2) {
       setStats([...stats, ...outputLines]);
       return;

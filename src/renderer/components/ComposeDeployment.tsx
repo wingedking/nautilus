@@ -132,6 +132,7 @@ const Deployment: React.FC<Props> = ({ currentFilePath, fileOpen }) => {
     if (healthCheck === HealthCheck.Loading) setHealthCheck(HealthCheck.On);
 
     const outputLines = data.toString().split('\n');
+    console.log('outputlines', outputLines);
     if (outputLines.length !== containerNames.length + 2) {
       setStats([...stats, ...outputLines]);
       return;
@@ -143,7 +144,9 @@ const Deployment: React.FC<Props> = ({ currentFilePath, fileOpen }) => {
         .split(' ')
         .filter((word: string) => word !== '');
       containers[i - 1] = {};
-      containers[i - 1].name = `container_${splitLine[1]}`;
+      if (splitLine[1].includes('_'))
+        containers[i - 1].name = `container_${splitLine[1].split('_')[1]}`;
+      else containers[i - 1].name = `container_${splitLine[1]}`;
       containers[i - 1].cpuUsage = splitLine[2];
       containers[i - 1].memUsage = splitLine[3] + splitLine[4] + splitLine[5];
       containers[i - 1].memPercentage = splitLine[6];
@@ -220,7 +223,7 @@ const Deployment: React.FC<Props> = ({ currentFilePath, fileOpen }) => {
           setDeployState(DeploymentStatus.DeadError);
         } else setDeployState(DeploymentStatus.Running);
       })
-      .catch((err) => console.log('err', err));
+      .catch((err) => console.error('error setting DeployState to Running'));
   };
 
   const deployKill: Void = () => {
@@ -268,7 +271,7 @@ const Deployment: React.FC<Props> = ({ currentFilePath, fileOpen }) => {
         cy="25"
         r="20"
         fill="none"
-        stroke-width="5"
+        strokeWidth="5"
       ></circle>
     </svg>
   );
@@ -326,12 +329,10 @@ const Deployment: React.FC<Props> = ({ currentFilePath, fileOpen }) => {
       style={{ display: 'none' }}
       onChange={(event: React.SyntheticEvent<HTMLInputElement>) => {
         // make sure there was something selected
-        // console.log('FileSelector Event and event.currentTarget', event, event.currentTarget)
         if (event.currentTarget) {
           // make sure user opened a file
           if (event.currentTarget.files) {
             // fire fileOpen function on first file opened
-            // console.log('Event.currentTarget.file', event.currentTarget.files[0] )
             setDeployState(DeploymentStatus.OpeningFile);
             fileOpen(event.currentTarget.files[0]);
           }

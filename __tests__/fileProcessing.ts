@@ -36,6 +36,10 @@ describe('Process Yaml File', () => {
     const correctYamlState = JSON.parse(
       fs.readFileSync(path.resolve(__dirname, './yamlState.json')).toString(),
     );
+    correctYamlState['filePath'] = path.resolve(
+      __dirname,
+      '../samples/docker-compose.bpc.yml',
+    );
     const yamlState = convertYamlToState(
       yamlJS,
       path.resolve(__dirname, '../samples/docker-compose.bpc.yml'),

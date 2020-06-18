@@ -1,25 +1,37 @@
 import child_process from 'child_process';
-import { shellResults } from '../renderer/App.d'
+import { shellResults } from '../renderer/App.d';
 
-const runDockerStats = (handleOnData: Function, containerNames: Array<string>) => {
-  runSpawn(handleOnData, 'docker', containerNames);
-}
+const runDockerStats = (
+  handleOnData: Function,
+  containerNames: Array<string>,
+): Function => {
+  return runSpawn(
+    (data: any) => handleOnData(data, containerNames),
+    'stats',
+    containerNames,
+  );
+};
 
-const runSpawn = (handleOnData: Function, cmd: string, args: Array<string>) => {
-  const sp = child_process.spawn('docker', args);
+const runSpawn = (
+  handleOnData: Function,
+  cmd: string,
+  args: Array<string>,
+): Function => {
+  const sp = child_process.spawn('docker', [cmd, ...args]);
 
-  sp.stdout.on("data", data => {
-    handleOnData(data, sp.kill.bind(sp));
+  sp.stdout.on('data', (data) => {
+    handleOnData(data);
   });
 
-  sp.stderr.on("data", data => {
+  sp.stderr.on('data', (data) => {
     console.log(`spawn stderr: ${data}`);
   });
 
   sp.on('error', (error) => {
     console.log(`child process error: ${error.message}`);
   });
-}
+  return sp.kill.bind(sp);
+};
 
 const runDockerComposeKill = (filePath: string) =>
   runShell(`docker-compose -f ${filePath} kill`, false);
@@ -110,5 +122,5 @@ export {
   runCheckStack,
   runDockerSwarmDeployStack,
   runSpawn,
-  runDockerStats
+  runDockerStats,
 };

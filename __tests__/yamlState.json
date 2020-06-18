@@ -1,6 +1,6 @@
 {
   "fileOpened": true,
-  "filePath": "C:\\Users\\davex\\DocumentsLocal\\Code\\Codesmith\\nautilus\\samples\\docker-compose.bpc.yml",
+  "filePath": "",
   "services": {
     "db": {
       "image": "postgres",

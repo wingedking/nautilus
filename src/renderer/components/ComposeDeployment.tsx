@@ -103,7 +103,7 @@ const Deployment: React.FC<Props> = ({ currentFilePath, fileOpen }) => {
         setHealthKillFn(() => fn);
       });
     } else if (healthCheck === HealthCheck.On) {
-      d3.selectAll('.nodeLabel').attr('y', (d: any) => 133 / 2 + 15);
+      d3.selectAll('.nodeLabel').attr('y', (d: any) => 133 / 2 + 20);
     } else if (healthCheck === HealthCheck.Off && healthKillFn) {
       d3.selectAll('.cpu-stat-title').style('display', 'none');
       d3.selectAll('.cpu-stat').style('display', 'none');
